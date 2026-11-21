@@ -1,0 +1,48 @@
+# Testes que não precisam da VM: serviços em C, lógica Python, regras do
+# Prometheus e sintaxe das regras do Wazuh.
+name: testes
+on: [push, pull_request]
+
+jobs:
+  servicos:
+    runs-on: ubuntu-latest
+    container: debian:trixie
+    steps:
+      - uses: actions/checkout@v4
+      - name: Dependências (as mesmas do Dockerfile)
+        run: |
+          apt-get update
+          apt-get install -y --no-install-recommends build-essential cmake pkg-config curl openssl \
+            libssl-dev libgnutls28-dev libmicrohttpd-dev libcurl4-openssl-dev libcjson-dev libsqlite3-dev
+      - name: Compilar e testar
+        run: |
+          cmake -S servicos -B build -DCMAKE_BUILD_TYPE=Release
+          cmake --build build -j2
+          ctest --test-dir build --output-on-failure
+
+  python-e-regras:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Testes unitários (correlacionador, sites, credenciais)
+        run: |
+          pip install pytest
+          python -m pytest -q tests/
+      - name: Regras do Prometheus (promtool)
+        run: |
+          curl -sSL https://github.com/prometheus/prometheus/releases/download/v3.5.0/prometheus-3.5.0.linux-amd64.tar.gz | tar xz
+          PATH="$PWD/prometheus-3.5.0.linux-amd64:$PATH" bash tests/prometheus-rules.sh
+      - name: Sintaxe das regras e descodificadores do Wazuh
+        run: |
+          python - <<'PY'
+          import pathlib, xml.etree.ElementTree as ET
+          for path in pathlib.Path('wazuh').rglob('*.xml'):
+              ET.fromstring('<root>' + path.read_text() + '</root>')
+              print('ok', path)
+          for path in pathlib.Path('wazuh/groups').glob('*.conf'):
+              ET.fromstring(path.read_text())
+              print('ok', path)
+          PY

@@ -1,0 +1,27 @@
+rewrite_header Subject *****SPAM*****
+required_score 5.0
+use_bayes 1
+bayes_auto_learn 1
+report_safe 0
+
+# So o proprio servidor e de confianca (127/8 entra sempre). Sem esta linha, o
+# SpamAssassin infere que a rede privada do laboratorio e confiavel e da -1,0
+# (ALL_TRUSTED) a qualquer cliente, incluindo o spammer.
+trusted_networks @IP@
+
+# A rede do laboratorio nao tem DNS publico; os testes de rede ficam desligados
+skip_rbl_checks 1
+dns_available no
+
+# Regras locais para burlas tipicas (premios, heranca, pedidos de dados)
+body     SSLE_PRIZE      /\b(you have won|claim your (prize|reward)|lottery winner|ganhou um premio)\b/i
+describe SSLE_PRIZE      Promessa de premio ou lotaria
+score    SSLE_PRIZE      4.0
+
+body     SSLE_INHERIT    /\b(inheritance|next of kin|transfer of (the )?funds|heranca)\b/i
+describe SSLE_INHERIT    Esquema de heranca ou transferencia de fundos
+score    SSLE_INHERIT    4.0
+
+body     SSLE_CREDENTIAL /\b(verify your account|confirm your password|bank details|dados bancarios)\b/i
+describe SSLE_CREDENTIAL Pedido de credenciais ou dados bancarios
+score    SSLE_CREDENTIAL 4.0

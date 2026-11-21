@@ -1,0 +1,3 @@
+16:45:34 ingestão verdadeira, CA do site   401 
+16:45:34 nome desviado, CA do site          curl: (60) SSL certificate problem: self-signed certificate More details here: https://curl.se/docs/sslcerts.html  curl failed to verify the legitimacy of the server and therefore could not establish a secure connection to it. To learn more about this situation and how to fix it, please visit the webpage mentioned above. 000 
+16:45:34 nome desviado, sem validação (-k) 202 

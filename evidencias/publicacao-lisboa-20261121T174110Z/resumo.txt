@@ -1,0 +1,16 @@
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de lisboa: antes 0, depois 0
+Alertmanager: lisboa active inibido por nada
+firewall k3s-master 17:41:13.306 DROP
+firewall k3s-master 17:43:14.426 none
+sonda 17:41:10 403
+sonda 17:41:17 000
+sonda 17:43:15 403
+regra 100245: 2x, primeira às 17:42:14.898 UTC - Ingestão: pedidos recusados por autenticação ou autorização em lisboa/ingestion-service.
+regra 100246: 8x, primeira às 17:41:12.584 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.lisboa.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 17:41:12.629 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 17:41:14.590 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 5x, primeira às 17:42:43.725 UTC - Host Unblocked by firewall-drop Active Response

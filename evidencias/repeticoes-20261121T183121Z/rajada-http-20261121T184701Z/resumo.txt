@@ -1,0 +1,13 @@
+Complete requests:      40
+Failed requests:        29
+Non-2xx responses:      29
+legítimo 200: 167
+legítimo: média 2.6 ms, máximo 4.2 ms
+firewall 18:47:06.852 DROP
+firewall 18:49:08.261 none
+sonda 18:47:06 80=000 8080=000
+sonda 18:49:13 80=200 8080=200
+regra 100204: 27x, primeira às 18:47:06.536 UTC - Gateway rejeitou um pedido de 10.225.218.197 por excesso de taxa (429).
+regra 100206: 2x, primeira às 18:47:06.555 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 651: 2x, primeira às 18:47:08.502 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:49:08.522 UTC - Host Unblocked by firewall-drop Active Response

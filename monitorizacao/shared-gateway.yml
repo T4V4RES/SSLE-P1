@@ -1,0 +1,26 @@
+groups:
+  - name: shared-gateway
+    rules:
+      - record: ssle:shared_gateway_requests:increase1m
+        expr: sum(increase(nginx_http_requests_total{job="gateway"}[1m]))
+      # Referência: média dos 30 min anteriores, sem os 2 min mais recentes,
+      # para que o próprio pico não eleve o limiar.
+      - record: ssle:shared_gateway_requests:baseline30m
+        expr: avg_over_time(ssle:shared_gateway_requests:increase1m[30m] offset 2m)
+      # Pico: três vezes a referência e nunca menos de 120 pedidos por minuto.
+      # Um cliente a 1 pedido/s ou uma rajada isolada de 40 pedidos ficam abaixo.
+      - alert: SharedGatewayRequestSurge
+        expr: |
+          ssle:shared_gateway_requests:increase1m
+            > clamp_min(3 * (ssle:shared_gateway_requests:baseline30m or vector(0)), 120)
+        keep_firing_for: 2m
+        labels: {severity: warning, site: gateway}
+        annotations:
+          summary: 'Pico de pedidos na entrada partilhada'
+          description: '{{ $value | printf "%.0f" }} pedidos no último minuto.'
+      - alert: SharedGatewayUnreachable
+        expr: up{job="gateway"} == 0 or nginx_up{job="gateway"} == 0
+        for: 30s
+        labels: {severity: critical, site: gateway}
+        annotations:
+          summary: 'Gateway partilhado indisponível'

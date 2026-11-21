@@ -1,0 +1,7 @@
+1.ª rajada: 29 × 429, bloqueio de 122 s no gateway (18:02:06 a 18:04:08 UTC); bloqueado em: ssle-gateway 
+2.ª rajada (reincidente): 29 × 429, bloqueio de 603 s no gateway (18:04:10 a 18:14:13 UTC); bloqueado em: ssle-gateway lis-mail k3s-master k3s-node1 
+3.ª rajada (historial limpo): 29 × 429, bloqueio de 122 s no gateway (18:14:18 a 18:16:20 UTC); bloqueado em: ssle-gateway 
+regra 100206: 7x, primeira às 18:02:06.088 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 100208: 1x, primeira às 18:04:11.400 UTC - Reincidente: 10.225.218.197 bloqueado pela 2.a vez na ultima hora (100206 em ssle-gateway); 10 min em todos os servicos.
+regra 651: 7x, primeira às 18:02:08.048 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 3x, primeira às 18:04:08.101 UTC - Host Unblocked by firewall-drop Active Response

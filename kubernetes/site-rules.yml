@@ -1,0 +1,53 @@
+groups:
+  - name: site-aggregates
+    rules:
+      - record: site:ssle_http_requests:rate1m
+        expr: sum by (service) (rate(ssle_http_requests_total{job="ssle"}[1m]))
+      - record: site:ssle_http_errors:ratio1m
+        expr: |
+          sum by (service) (rate(ssle_http_requests_total{job="ssle", code="5xx"}[1m]))
+            / clamp_min(sum by (service) (rate(ssle_http_requests_total{job="ssle"}[1m])), 1e-9)
+      - record: site:ssle_http_latency_p95:1m
+        expr: histogram_quantile(0.95, sum by (service, le) (rate(ssle_http_request_duration_seconds_bucket{job="ssle"}[1m])))
+      - record: site:ssle_instances_up:sum
+        expr: sum by (service) (up{job="ssle"})
+      - record: site:ssle_ingestion_auth_rejections:increase5m
+        expr: |
+          sum by (site, service) (increase(ssle_http_auth_rejections_total{job="ssle",service="ingestion-service"}[5m]))
+  - name: site-alerts
+    rules:
+      # kind=security: o Alertmanager nunca suprime este alerta quando a
+      # federação do site falha (ver inhibit_rules em alertmanager-k3s.yml).
+      - alert: SsleIngestionAuthRejections
+        expr: site:ssle_ingestion_auth_rejections:increase5m >= 3
+        labels: {severity: warning, kind: security}
+        annotations:
+          summary: 'Pedidos de ingestão recusados por autenticação ou autorização'
+      - alert: SsleInstanceDown
+        expr: up{job="ssle"} == 0
+        for: 30s
+        labels: {severity: critical}
+        annotations:
+          summary: 'Instância {{ $labels.instance_id }} indisponível'
+      - alert: SsleServiceUnavailable
+        expr: |
+          (sum by (site, service) (up{job="ssle"}) == 0)
+            or absent(up{job="ssle",service="ingestion-service"})
+            or absent(up{job="ssle",service="storage-service"})
+            or absent(up{job="ssle",service="analytics-service"})
+        for: 30s
+        labels: {severity: critical}
+        annotations:
+          summary: 'Sem réplicas acessíveis para {{ $labels.service }}'
+      - alert: SsleHighLatency
+        expr: site:ssle_http_latency_p95:1m > 0.5
+        for: 1m
+        labels: {severity: warning}
+        annotations:
+          summary: 'p95 elevado em {{ $labels.service }}'
+      - alert: SsleErrorRate
+        expr: site:ssle_http_errors:ratio1m > 0.05
+        for: 1m
+        labels: {severity: warning}
+        annotations:
+          summary: 'Erros 5xx em {{ $labels.service }}'

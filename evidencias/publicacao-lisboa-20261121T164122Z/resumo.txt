@@ -1,0 +1,8 @@
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de lisboa: antes 0, depois 0
+Alertmanager: lisboa active kind=security inibido por nada inicio 2026-11-21T16:41:44.084Z
+pedidos 16:41:22.8, alerta local firing 16:41:44.1, Wazuh 100245 16:42:04.5 (41,7 s)
+regra 100245: 1x, primeira às 16:42:04.542 UTC - Ingestão: pedidos recusados por autenticação ou autorização em lisboa/ingestion-service.

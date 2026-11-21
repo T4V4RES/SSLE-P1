@@ -1,0 +1,9 @@
+18:59:23.563 resposta 404
+firewall 18:59:24.835 DROP
+firewall 19:01:26.015 none
+sonda 18:59:23 80=200 8080=200
+sonda 18:59:28 80=000 8080=000
+sonda 19:01:26 80=200 8080=200
+regra 100210: 1x, primeira às 18:59:24.580 UTC - Shellshock (CVE-2014-6271) contra o gateway, origem 10.225.218.190.
+regra 651: 1x, primeira às 18:59:24.600 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:01:26.637 UTC - Host Unblocked by firewall-drop Active Response

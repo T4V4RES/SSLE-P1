@@ -1,0 +1,6 @@
+regra 100205: 49x, primeira às 18:16:48.315 UTC - Volume elevado: 10.225.218.197 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 130x, primeira às 18:14:18.160 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 28x, primeira às 18:16:48.334 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.190).
+regra 100231: 1x, primeira às 18:17:20.114 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 1x, primeira às 18:17:21.474 UTC - Correlacao no site lisboa: ataque 100207 e sintoma SharedGatewayRequestSurge em 120 segundos.
+regra 651: 130x, primeira às 18:14:20.120 UTC - Host Blocked by firewall-drop Active Response

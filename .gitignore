@@ -1,0 +1,13 @@
+build/
+.migration-backup/
+*.token
+*.key
+__pycache__/
+*.pyc
+relatorio/*.aux
+relatorio/*.log
+relatorio/*.out
+relatorio/*.toc
+.vscode/
+.pytest_cache/
+relatorio/arquitetura.drawio

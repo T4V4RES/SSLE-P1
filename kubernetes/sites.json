@@ -1,0 +1,4 @@
+{
+  "lisboa": {"ingestion_replicas": 2, "sensor_port": 30441, "api_port": 30501, "metrics_port": 30601, "gateway_port": 80},
+  "porto":  {"ingestion_replicas": 2, "sensor_port": 30442, "api_port": 30502, "metrics_port": 30602, "gateway_port": 8080}
+}

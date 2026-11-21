@@ -1,0 +1,23 @@
+groups:
+  - name: global-alerts
+    rules:
+      - alert: SiteMonitoringUnreachable
+        expr: up{job=~"federate.*"} == 0
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "Prometheus do site {{ $labels.instance }} inacessivel"
+          description: "Perdeu-se a visibilidade sobre um site inteiro."
+
+      # O mesmo servico degradado em varios sites ao mesmo tempo aponta para
+      # uma causa comum (ataque distribuido ou dependencia partilhada). Um alerta
+      # por site afetado, para cada um trazer o site e o servico.
+      - alert: MultiSiteDegradation
+        expr: |
+          site:ssle_http_latency_p95:1m > 0.5
+            and on (service) (count by (service) (site:ssle_http_latency_p95:1m > 0.5) >= 2)
+        for: 1m
+        labels: {severity: critical}
+        annotations:
+          summary: "{{ $labels.service }} degradado em varios sites, entre eles {{ $labels.site }}"
+          description: "p95 de {{ $value | humanizeDuration }} em {{ $labels.site }}; o mesmo servico esta degradado noutro site."

@@ -1,0 +1,18 @@
+spam aceite pelo SMTP: 20 de 40
+recusado:       5 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:      10 result=Yes score=12.6 client=10.225.218.180
+filtro:      10 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 20
+limite anvil: 0
+firewall 18:52:26.883 DROP
+firewall 18:54:30.228 none
+sonda 18:52:47 sem ligação: TimeoutError
+sonda 18:54:31 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=787 quarentena=25
+caixa e fila depois: caixa=789 quarentena=45
+regra 100221: 16x, primeira às 18:52:26.615 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 4x, primeira às 18:52:26.752 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 4x, primeira às 18:52:28.558 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:54:30.609 UTC - Host Unblocked by firewall-drop Active Response

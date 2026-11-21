@@ -1,0 +1,26 @@
+19:37:50.142 campanha #0 OK
+19:37:50.250 campanha #1 OK
+19:37:50.356 campanha #2 OK
+19:37:50.463 campanha #3 OK
+19:37:50.569 campanha #4 OK
+19:37:50.676 campanha #5 OK
+19:37:50.782 campanha #6 OK
+19:37:50.888 campanha #7 OK
+19:37:50.995 campanha #8 OK
+19:37:51.102 campanha #9 OK
+19:37:51.209 campanha #10 OK
+19:37:51.315 campanha #11 OK
+19:37:51.422 campanha #12 OK
+19:37:51.529 campanha #13 OK
+19:37:51.635 campanha #14 OK
+19:37:51.742 campanha #15 OK
+19:37:51.849 campanha #16 OK
+19:37:51.955 campanha #17 OK
+19:37:52.061 campanha #18 OK
+19:37:52.168 campanha #19 OK
+19:37:52.275 campanha #20 FALHOU SMTPSenderRefused: (450, b'4.7.1 Error: too much mail from 10.225.218.180', 'promo20@bot-2.incus')
+19:37:52.378 campanha #21 FALHOU TimeoutError: timed out
+19:37:56.484 campanha #22 FALHOU TimeoutError: timed out
+19:38:00.590 campanha #23 FALHOU TimeoutError: timed out
+19:38:04.694 campanha #24 FALHOU TimeoutError: timed out
+19:38:04.694 campanha desiste após 5 falhas seguidas

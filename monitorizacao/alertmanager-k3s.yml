@@ -1,0 +1,18 @@
+route:
+  receiver: wazuh
+  group_by: [site]
+  group_wait: 20s
+  group_interval: 1m
+  repeat_interval: 30m
+receivers:
+  - name: wazuh
+    webhook_configs:
+      - url: http://localhost:9095/alerts
+        send_resolved: true
+inhibit_rules:
+  # Sem federação do site, os avisos de desempenho desse site são derivados da
+  # falha e ficam suprimidos. Os alertas de segurança passam sempre: quem
+  # derrubasse o Prometheus do site não pode apagar o alerta de credenciais.
+  - source_matchers: [alertname="SiteMonitoringUnreachable"]
+    target_matchers: [severity="warning", kind!="security"]
+    equal: [site]

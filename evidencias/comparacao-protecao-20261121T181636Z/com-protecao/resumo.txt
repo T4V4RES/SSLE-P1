@@ -1,0 +1,7 @@
+modo com-protecao
+bot-1 140×000 bot-1 20×200 bot-1 567×429 
+bot-2 140×000 bot-2 18×200 bot-2 457×429 
+bot-3 140×000 bot-3 18×200 bot-3 382×429 
+legítimo: 68/68 200, falhas 0, mediana 2.3 ms, p95 2.9 ms, máximo 338.7 ms
+p95 da análise no Prometheus (máx. em 2 min):  s
+pedidos no gateway (máx. por minuto): 

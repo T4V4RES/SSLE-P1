@@ -1,0 +1,71 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+  external_labels:
+    site: '@SITE@'
+alerting:
+  alertmanagers:
+    - static_configs:
+        - targets: [prom-global.incus:9093]
+rule_files: [/etc/prometheus/rules.yml]
+scrape_configs:
+  - job_name: ssle
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names: ['@SITE@']
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_name]
+        regex: metrics
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_phase]
+        regex: Running
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_label_app]
+        target_label: service
+        replacement: ${1}-service
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        target_label: node
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: replica
+      - target_label: site
+        replacement: '@SITE@'
+      - target_label: rack
+        replacement: rack1
+      - source_labels: [__meta_kubernetes_pod_node_name, __meta_kubernetes_pod_label_app, __meta_kubernetes_pod_name]
+        regex: (.*);(.*);(.*)
+        target_label: instance_id
+        replacement: pt.@SITE@.dc1.rack1.${1}.${2}.${3}
+
+  - job_name: ssle-tls
+    scheme: https
+    tls_config:
+      ca_file: /etc/ssle/ca/ca.crt
+      server_name: ingestion
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names: ['@SITE@']
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_name]
+        regex: metrics-tls
+        action: keep
+      - source_labels: [__meta_kubernetes_pod_phase]
+        regex: Running
+        action: keep
+      - target_label: job
+        replacement: ssle
+      - target_label: service
+        replacement: ingestion-service
+      - target_label: site
+        replacement: '@SITE@'
+      - target_label: rack
+        replacement: rack1
+      - source_labels: [__meta_kubernetes_pod_node_name]
+        target_label: node
+      - source_labels: [__meta_kubernetes_pod_name]
+        target_label: replica
+      - source_labels: [__meta_kubernetes_pod_node_name, __meta_kubernetes_pod_name]
+        regex: (.*);(.*)
+        target_label: instance_id
+        replacement: pt.@SITE@.dc1.rack1.${1}.ingestion.${2}

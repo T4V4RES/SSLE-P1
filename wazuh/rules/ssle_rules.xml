@@ -1,0 +1,182 @@
+<!-- Regras proprias do projeto SSLE. IDs no intervalo de utilizador (100200+). -->
+
+<!-- ================= Cenario 1: DoS/DDoS no gateway =================
+     So os 429 do limitador ganham regra propria (100204, filha de 31101);
+     o volume (100205) conta pelo grupo "web" do ruleset base, sem roubar
+     os alertas das regras de ataque (ex.: Shellshock 31166/31168). -->
+<group name="ssle,web,attack,">
+
+  <!-- Limiares para a carga do guiao (40 pedidos, concorrencia 2 por cliente).
+       O nginx deixa passar 5 r/s com burst 10 por IP; o excesso recebe 429. -->
+
+  <!-- Cada pedido rejeitado pelo limitador do nginx (31101 = codigo 4xx). -->
+  <rule id="100204" level="3">
+    <if_sid>31101</if_sid>
+    <id>^429$</id>
+    <description>Gateway rejeitou um pedido de $(srcip) por excesso de taxa (429).</description>
+    <group>ssle_dos,</group>
+  </rule>
+
+  <!-- Marca cada resposta 2xx/3xx da API. Estas linhas ficavam na 31100
+       (nivel 0) e a frequencia so conta regras de nivel 1 ou superior.
+       Os pedidos simples continuam a passar primeiro pela 31108 (Shellshock). -->
+  <rule id="100203" level="1">
+    <if_sid>31100</if_sid>
+    <id>^2|^3</id>
+    <url>^/api/</url>
+    <description>Pedido servido pela API do gateway.</description>
+    <group>ssle_dos,</group>
+  </rule>
+
+  <!-- Volume sem protecao: muitos pedidos servidos ao mesmo IP.
+       Serve o modo sem limitador, em que nao ha 429; nao bloqueia. -->
+  <rule id="100205" level="7" frequency="30" timeframe="10">
+    <if_matched_sid>100203</if_matched_sid>
+    <same_source_ip />
+    <description>Volume elevado: $(srcip) fez muitos pedidos ao gateway em 10 s.</description>
+    <group>ssle_dos,</group>
+  </rule>
+
+  <!-- Rejeicoes repetidas da mesma origem: a origem insiste acima do limite.
+       E esta que aciona o firewall-drop e alimenta o correlador. -->
+  <rule id="100206" level="10" frequency="10" timeframe="10">
+    <if_matched_sid>100204</if_matched_sid>
+    <same_source_ip />
+    <description>Possivel DoS: $(srcip) excedeu repetidamente o limite de pedidos do gateway.</description>
+    <group>ssle_dos,</group>
+    <mitre>
+      <id>T1498</id>
+    </mitre>
+  </rule>
+
+  <!-- Varias origens com volume sustentado ao mesmo tempo, cada uma abaixo do
+       limite por IP: padrao de botnet. Fica como alerta, sem bloqueio
+       automatico, porque uma afluencia legitima concentrada da o mesmo sinal
+       e a resposta ativa so bloquearia a ultima origem. -->
+  <rule id="100207" level="10" frequency="3" timeframe="60">
+    <if_matched_sid>100205</if_matched_sid>
+    <different_srcip />
+    <description>Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima $(srcip)).</description>
+    <group>ssle_dos,ssle_botnet,</group>
+    <mitre>
+      <id>T1498</id>
+    </mitre>
+  </rule>
+
+  <!-- ============ Cenario 3: Shellshock ============
+       31166 = attempt (resposta de erro); 31168 = detected (resposta 2xx/3xx).
+       Elevamos ambos para nivel de resposta ativa. -->
+  <rule id="100210" level="12">
+    <if_sid>31166,31168</if_sid>
+    <description>Shellshock (CVE-2014-6271) contra o gateway, origem $(srcip).</description>
+    <group>ssle_shellshock,</group>
+    <mitre>
+      <id>T1190</id>
+    </mitre>
+  </rule>
+</group>
+
+<!-- ================= Cenario 2: Spam / junk email ================= -->
+<group name="ssle,mail,">
+
+  <rule id="100220" level="0">
+    <decoded_as>ssle-spamfilter</decoded_as>
+    <description>Evento do filtro de spam.</description>
+  </rule>
+
+  <rule id="100221" level="5">
+    <if_sid>100220</if_sid>
+    <field name="spam_result">Yes</field>
+    <description>Mensagem marcada como spam (origem $(srcip), score $(spam_score)).</description>
+    <group>ssle_spam,</group>
+  </rule>
+
+  <!-- Spam em volume: 5 mensagens marcadas do mesmo IP num minuto. As marcadas
+       ja ficam em quarentena; o bloqueio corta o resto da campanha. -->
+  <rule id="100222" level="10" frequency="5" timeframe="60">
+    <if_matched_sid>100221</if_matched_sid>
+    <same_source_ip />
+    <description>Spam em volume: $(srcip) enviou varias mensagens marcadas em 60s.</description>
+    <group>attack,ssle_spam,</group>
+    <mitre>
+      <id>T1566</id>
+    </mitre>
+  </rule>
+</group>
+
+<!-- ======= Extra: publicacao recusada, por origem =======
+     A ingestao regista cada 401/403/400 com o IP real do cliente (o Service usa
+     externalTrafficPolicy: Local). O agente do no K3s le o log do contentor. -->
+<group name="ssle,ingestion,">
+
+  <rule id="100246" level="5">
+    <decoded_as>ssle-ingestion</decoded_as>
+    <description>Ingestao recusou uma publicacao de $(srcip) (HTTP $(ingest_status), sensor $(sensor_id)).</description>
+    <group>ssle_ingestion_auth,</group>
+  </rule>
+
+  <!-- Tentativas repetidas da mesma origem: forca bruta ou falsificacao de
+       leituras. Bloqueia a origem na firewall do no K3s que recebeu o trafego. -->
+  <rule id="100247" level="10" frequency="5" timeframe="60">
+    <if_matched_sid>100246</if_matched_sid>
+    <same_source_ip />
+    <description>Publicacoes recusadas repetidas de $(srcip): origem bloqueada no no K3s.</description>
+    <group>attack,ssle_ingestion_auth,</group>
+    <mitre>
+      <id>T1110</id>
+    </mitre>
+  </rule>
+</group>
+
+<!-- ======= Correlacao: alertas do Prometheus dentro do SIEM ======= -->
+<group name="ssle,prometheus,">
+
+  <rule id="100230" level="0">
+    <decoded_as>json</decoded_as>
+    <field name="pm_source">prometheus</field>
+    <description>Alerta do Prometheus recebido no SIEM.</description>
+  </rule>
+
+  <rule id="100231" level="6">
+    <if_sid>100230</if_sid>
+    <field name="pm_status">firing</field>
+    <description>Prometheus: $(pm_alertname) em $(pm_site)/$(pm_service) ($(pm_node)).</description>
+    <group>ssle_perf,</group>
+  </rule>
+
+  <rule id="100245" level="8">
+    <if_sid>100231</if_sid>
+    <field name="pm_alertname">^SsleIngestionAuthRejections$</field>
+    <description>Ingestão: pedidos recusados por autenticação ou autorização em $(pm_site)/$(pm_service).</description>
+    <group>ssle_ingestion_auth,</group>
+  </rule>
+
+  <!-- Reputacao (monitorizacao/correlate.py): a mesma origem volta a ser
+       bloqueada, em qualquer servico, depois de o bloqueio anterior expirar.
+       A resposta ativa bloqueia-a em todos os agentes com firewall. -->
+  <rule id="100208" level="12">
+    <decoded_as>json</decoded_as>
+    <field name="ssle_reputation">^reincidente$</field>
+    <field name="bloqueios">^2$</field>
+    <description>Reincidente: $(srcip) bloqueado pela 2.a vez na ultima hora ($(attack_rule) em $(agent)); 10 min em todos os servicos.</description>
+    <group>ssle_reputacao,</group>
+  </rule>
+
+  <rule id="100209" level="13">
+    <decoded_as>json</decoded_as>
+    <field name="ssle_reputation">^reincidente$</field>
+    <field name="bloqueios">^3$|^4$|^5$|^6$|^7$|^8$|^9$|^\d\d+$</field>
+    <description>Reincidente: $(srcip) bloqueado $(bloqueios) vezes na ultima hora; 1 h em todos os servicos.</description>
+    <group>ssle_reputacao,</group>
+  </rule>
+
+  <!-- Correlacao de causa (monitorizacao/correlate.py): bloqueio ou botnet
+       detetados pelo Wazuh e pico ou latencia vistos pelo Prometheus, no mesmo
+       site ou na entrada partilhada, apontam para o mesmo incidente -->
+  <rule id="100232" level="12">
+    <decoded_as>json</decoded_as>
+    <field name="ssle_correlation">^dos_performance$</field>
+    <description>Correlacao no site $(site): ataque $(attack_rule) e sintoma $(performance_alert) em 120 segundos.</description>
+    <group>ssle_dos,ssle_perf,</group>
+  </rule>
+</group>

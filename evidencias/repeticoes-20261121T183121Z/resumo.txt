@@ -1,0 +1,26 @@
+métrica                                            mediana     mín.     máx.   n
+DDoS: bots bloqueados (de 3)                           3.0      3.0      3.0   5
+DDoS: último bot bloqueado (s)                         6.0      5.0      7.0   5
+DDoS: 100207 (s)                                       4.8      4.1      5.6   5
+DDoS: correlações 100232                               4.0      0.0      4.0   5
+DDoS: cliente legítimo com 200 (%)                   100.0    100.0    100.0   5
+DDoS: latência máxima do legítimo (ms)                 2.7      2.4      2.9   5
+DDoS: primeira 100232 (s)                             39.9     35.1     46.7   4
+publicação: recusas 401/403/400 (de 7)                 7.0      7.0      7.0   5
+publicação: leituras forjadas gravadas                 0.0      0.0      0.0   5
+publicação: 100247 (s)                                 1.1      0.4      2.2   5
+publicação: bloqueio no nó K3s (s)                     1.5      0.8      2.8   5
+publicação: 100245 (s)                                37.4     33.1     43.1   5
+rajada: respostas 429 (de 40)                         29.0     29.0     29.0   5
+rajada: 100206 (s)                                     1.0      0.2      2.0   5
+rajada: bloqueio no gateway (s)                        1.6      0.4      2.2   5
+rajada: duração do bloqueio (s)                      121.4    121.0    121.5   5
+rajada: cliente legítimo com 200 (%)                 100.0    100.0    100.0   5
+rajada: latência máxima do legítimo (ms)               4.0      3.2      4.7   5
+Shellshock: 100210 (s)                                 1.0      0.2      1.5   5
+Shellshock: bloqueio no gateway (s)                    1.3      0.7      1.9   5
+spam: aceites pelo SMTP (de 40)                       17.0     13.0     20.0   5
+spam: em quarentena                                   17.0     13.0     20.0   5
+spam: mensagens novas na caixa (2 legítimas)           2.0      2.0      2.0   5
+spam: bloqueio no correio (s)                          2.3      1.6      2.9   5
+spam: legítimas entregues (de 2)                       2.0      2.0      2.0   5

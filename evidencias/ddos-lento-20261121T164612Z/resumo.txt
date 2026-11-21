@@ -1,0 +1,10 @@
+bot-1: 149×200 
+bot-2: 149×200 
+bot-3: 149×200 
+legítimo 200: 79
+legítimo: média 2.2 ms, máximo 3.1 ms
+regra 100205: 8x, primeira às 16:46:26.197 UTC - Volume elevado: 10.225.218.190 fez muitos pedidos ao gateway em 10 s.
+regra 100207: 4x, primeira às 16:46:26.197 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.197).
+regra 100231: 1x, primeira às 16:47:04.572 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 1x, primeira às 16:47:05.055 UTC - Correlacao no site lisboa: ataque 100207 e sintoma SharedGatewayRequestSurge em 120 segundos.
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100207', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '38.375000'}

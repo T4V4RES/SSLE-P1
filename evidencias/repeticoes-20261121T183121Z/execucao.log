@@ -1,0 +1,524 @@
+18:31:21.172 repetição 1/5
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/rajada-http-20261121T183126Z
+inicio 18:31:26.607 bot-1=10.225.218.197 porta=80
+ataque 18:31:31.611
+Complete requests:      40
+Failed requests:        29
+Non-2xx responses:      29
+legítimo 200: 167
+legítimo: média 2.3 ms, máximo 3.9 ms
+firewall 18:31:32.649 DROP
+firewall 18:33:34.028 none
+sonda 18:31:31 80=200 8080=200
+sonda 18:31:36 80=000 8080=000
+sonda 18:33:34 80=200 8080=200
+regra 100204: 27x, primeira às 18:31:32.352 UTC - Gateway rejeitou um pedido de 10.225.218.197 por excesso de taxa (429).
+regra 100206: 2x, primeira às 18:31:32.372 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 651: 2x, primeira às 18:31:32.532 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 3x, primeira às 18:33:20.364 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/ddos-rapido-20261121T183424Z
+inicio 18:34:24.986 modo=rapido pausa=0.1s duracao=20s
+bot-1=10.225.218.197
+bot-2=10.225.218.180
+bot-3=10.225.218.190
+bot-1: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 18:34:36
+bot-2: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 18:34:36
+bot-3: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 18:34:36
+legítimo 200: 59
+legítimo: média 2.2 ms, máximo 2.6 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+regra 100205: 2x, primeira às 18:34:34.476 UTC - Volume elevado: 10.225.218.197 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 18:34:36.449 UTC - Possivel DoS: 10.225.218.180 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 18:34:34.487 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.190).
+regra 651: 3x, primeira às 18:34:38.377 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 3x, primeira às 18:36:38.402 UTC - Host Unblocked by firewall-drop Active Response
+sem correlação 100232
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/spam-20261121T183714Z
+inicio 18:37:14.750 bot-2=10.225.218.180
+antes: caixa=785 quarentena=11
+ataque 18:37:15.065
+fim-ataque 18:37:37.157
+depois: caixa=787 quarentena=25
+spam aceite pelo SMTP: 14 de 40
+recusado:       5 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:       7 result=Yes score=12.6 client=10.225.218.180
+filtro:       7 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 14
+limite anvil: 0
+firewall 18:37:16.708 DROP
+firewall 18:39:18.412 none
+sonda 18:37:37 sem ligação: TimeoutError
+sonda 18:39:21 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=785 quarentena=11
+caixa e fila depois: caixa=787 quarentena=25
+regra 100221: 12x, primeira às 18:37:16.532 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 2x, primeira às 18:37:16.672 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 2x, primeira às 18:37:18.463 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:39:18.521 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/publicacao-lisboa-20261121T184047Z
+inicio 18:40:47.229 alvo=https://10.225.218.110:30441/ingest
+18:40:47 sem credencial     401
+18:40:47 sem credencial     401
+18:40:47 token forjado      403
+18:40:47 token forjado      403
+18:40:47 token forjado      403
+18:40:47 ID com ../         400
+18:40:47 ID inexistente     403
+18:40:47 HTTP simples       000
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de lisboa: antes 0, depois 0
+Alertmanager: lisboa active inibido por nada
+firewall k3s-master 18:40:48.093 DROP
+firewall k3s-master 18:42:49.345 none
+sonda 18:40:49 000
+sonda 18:42:54 403
+regra 100245: 1x, primeira às 18:41:20.314 UTC - Ingestão: pedidos recusados por autenticação ou autorização em lisboa/ingestion-service.
+regra 100246: 7x, primeira às 18:40:47.688 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.lisboa.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 18:40:47.695 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 18:40:49.360 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:42:49.413 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/shellshock-20261121T184414Z
+inicio 18:44:14.064 bot-3=10.225.218.190
+18:44:14.066 resposta 404
+18:44:14.066 resposta 404
+firewall 18:44:14.728 DROP
+firewall 18:46:16.041 none
+sonda 18:44:14 80=200 8080=200
+sonda 18:44:19 80=000 8080=000
+sonda 18:46:16 80=200 8080=200
+regra 100210: 1x, primeira às 18:44:14.483 UTC - Shellshock (CVE-2014-6271) contra o gateway, origem 10.225.218.190.
+regra 651: 1x, primeira às 18:44:14.506 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:46:16.537 UTC - Host Unblocked by firewall-drop Active Response
+18:46:55.776 repetição 2/5
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/rajada-http-20261121T184701Z
+inicio 18:47:01.400 bot-1=10.225.218.197 porta=80
+ataque 18:47:06.404
+Complete requests:      40
+Failed requests:        29
+Non-2xx responses:      29
+legítimo 200: 167
+legítimo: média 2.6 ms, máximo 4.2 ms
+firewall 18:47:06.852 DROP
+firewall 18:49:08.261 none
+sonda 18:47:06 80=000 8080=000
+sonda 18:49:13 80=200 8080=200
+regra 100204: 27x, primeira às 18:47:06.536 UTC - Gateway rejeitou um pedido de 10.225.218.197 por excesso de taxa (429).
+regra 100206: 2x, primeira às 18:47:06.555 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 651: 2x, primeira às 18:47:08.502 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:49:08.522 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/ddos-rapido-20261121T184959Z
+inicio 18:49:59.660 modo=rapido pausa=0.1s duracao=20s
+bot-1=10.225.218.197
+bot-2=10.225.218.180
+bot-3=10.225.218.190
+bot-1: 13×000 38×200 11×429 
+  primeiro 000 (bloqueado) às 18:50:10
+bot-2: 13×000 38×200 11×429 
+  primeiro 000 (bloqueado) às 18:50:10
+bot-3: 13×000 38×200 11×429 
+  primeiro 000 (bloqueado) às 18:50:10
+legítimo 200: 60
+legítimo: média 2.1 ms, máximo 2.4 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+regra 100205: 2x, primeira às 18:50:10.577 UTC - Volume elevado: 10.225.218.190 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 18:50:10.678 UTC - Possivel DoS: 10.225.218.180 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 18:50:10.586 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.197).
+regra 100231: 1x, primeira às 18:50:50.418 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 4x, primeira às 18:50:51.749 UTC - Correlacao no site lisboa: ataque 100207 e sintoma SharedGatewayRequestSurge em 120 segundos.
+regra 651: 3x, primeira às 18:50:12.533 UTC - Host Blocked by firewall-drop Active Response
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100207', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '39.832000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '39.719000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.180', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '39.740000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.190', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '39.738000'}
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/spam-20261121T185224Z
+inicio 18:52:24.310 bot-2=10.225.218.180
+antes: caixa=787 quarentena=25
+ataque 18:52:24.591
+fim-ataque 18:52:47.275
+depois: caixa=789 quarentena=45
+spam aceite pelo SMTP: 20 de 40
+recusado:       5 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:      10 result=Yes score=12.6 client=10.225.218.180
+filtro:      10 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 20
+limite anvil: 0
+firewall 18:52:26.883 DROP
+firewall 18:54:30.228 none
+sonda 18:52:47 sem ligação: TimeoutError
+sonda 18:54:31 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=787 quarentena=25
+caixa e fila depois: caixa=789 quarentena=45
+regra 100221: 16x, primeira às 18:52:26.615 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 4x, primeira às 18:52:26.752 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 4x, primeira às 18:52:28.558 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:54:30.609 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/publicacao-porto-20261121T185557Z
+inicio 18:55:57.109 alvo=https://10.225.218.110:30442/ingest
+18:55:57 sem credencial     401
+18:55:57 sem credencial     401
+18:55:57 token forjado      403
+18:55:57 token forjado      403
+18:55:57 token forjado      403
+18:55:57 ID com ../         400
+18:55:57 ID inexistente     403
+18:55:57 HTTP simples       000
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de porto: antes 0, depois 0
+Alertmanager: porto active inibido por nada
+firewall k3s-master 18:55:57.952 DROP
+firewall k3s-master 18:57:58.941 none
+sonda 18:55:59 000
+sonda 18:58:03 403
+regra 100245: 1x, primeira às 18:56:34.468 UTC - Ingestão: pedidos recusados por autenticação ou autorização em porto/ingestion-service.
+regra 100246: 7x, primeira às 18:55:57.503 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.porto.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 18:55:57.512 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 18:55:57.768 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:57:59.565 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/shellshock-20261121T185923Z
+inicio 18:59:23.561 bot-3=10.225.218.190
+18:59:23.563 resposta 404
+18:59:23.563 resposta 404
+firewall 18:59:24.835 DROP
+firewall 19:01:26.015 none
+sonda 18:59:23 80=200 8080=200
+sonda 18:59:28 80=000 8080=000
+sonda 19:01:26 80=200 8080=200
+regra 100210: 1x, primeira às 18:59:24.580 UTC - Shellshock (CVE-2014-6271) contra o gateway, origem 10.225.218.190.
+regra 651: 1x, primeira às 18:59:24.600 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:01:26.637 UTC - Host Unblocked by firewall-drop Active Response
+19:02:04.787 repetição 3/5
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/rajada-http-20261121T190209Z
+inicio 19:02:09.949 bot-1=10.225.218.197 porta=80
+ataque 19:02:14.953
+Complete requests:      40
+Failed requests:        29
+Non-2xx responses:      29
+legítimo 200: 168
+legítimo: média 2.1 ms, máximo 4.0 ms
+firewall 19:02:17.144 DROP
+firewall 19:04:18.400 none
+sonda 19:02:15 80=200 8080=200
+sonda 19:02:20 80=000 8080=000
+sonda 19:04:17 80=200 8080=200
+regra 100204: 27x, primeira às 19:02:16.619 UTC - Gateway rejeitou um pedido de 10.225.218.197 por excesso de taxa (429).
+regra 100206: 2x, primeira às 19:02:16.641 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 651: 2x, primeira às 19:02:18.601 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:04:18.619 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/ddos-rapido-20261121T190508Z
+inicio 19:05:08.691 modo=rapido pausa=0.1s duracao=20s
+bot-1=10.225.218.197
+bot-2=10.225.218.180
+bot-3=10.225.218.190
+bot-1: 12×000 43×200 14×429 
+  primeiro 000 (bloqueado) às 19:05:20
+bot-2: 12×000 43×200 14×429 
+  primeiro 000 (bloqueado) às 19:05:20
+bot-3: 12×000 43×200 14×429 
+  primeiro 000 (bloqueado) às 19:05:20
+legítimo 200: 59
+legítimo: média 2.1 ms, máximo 2.7 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+regra 100205: 2x, primeira às 19:05:18.755 UTC - Volume elevado: 10.225.218.190 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 19:05:20.664 UTC - Possivel DoS: 10.225.218.180 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 19:05:18.770 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.197).
+regra 100231: 1x, primeira às 19:05:50.539 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 4x, primeira às 19:05:51.833 UTC - Correlacao no site lisboa: ataque 100206 e sintoma SharedGatewayRequestSurge em 120 segundos.
+regra 651: 3x, primeira às 19:05:22.626 UTC - Host Blocked by firewall-drop Active Response
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '29.873000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.180', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '29.875000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100207', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '31.769000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.190', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '29.871000'}
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/spam-20261121T190733Z
+inicio 19:07:34.056 bot-2=10.225.218.180
+antes: caixa=789 quarentena=45
+ataque 19:07:34.325
+fim-ataque 19:07:56.690
+depois: caixa=791 quarentena=62
+spam aceite pelo SMTP: 17 de 40
+recusado:       5 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:       8 result=Yes score=12.6 client=10.225.218.180
+filtro:       9 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 17
+limite anvil: 0
+firewall 19:07:36.644 DROP
+firewall 19:09:38.319 none
+sonda 19:07:56 sem ligação: TimeoutError
+sonda 19:09:40 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=789 quarentena=45
+caixa e fila depois: caixa=791 quarentena=62
+regra 100221: 14x, primeira às 19:07:36.024 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 3x, primeira às 19:07:36.160 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 3x, primeira às 19:07:37.954 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:09:40.009 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/publicacao-lisboa-20261121T191106Z
+inicio 19:11:06.921 alvo=https://10.225.218.110:30441/ingest
+19:11:07 sem credencial     401
+19:11:07 sem credencial     401
+19:11:07 token forjado      403
+19:11:07 token forjado      403
+19:11:07 token forjado      403
+19:11:07 ID com ../         400
+19:11:07 ID inexistente     403
+19:11:07 HTTP simples       000
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de lisboa: antes 0, depois 0
+Alertmanager: lisboa active inibido por nada
+firewall k3s-master 19:11:08.377 DROP
+firewall k3s-master 19:13:08.640 none
+sonda 19:11:07 403
+sonda 19:11:14 000
+sonda 19:13:11 403
+regra 100245: 1x, primeira às 19:11:49.978 UTC - Ingestão: pedidos recusados por autenticação ou autorização em lisboa/ingestion-service.
+regra 100246: 8x, primeira às 19:11:07.974 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.lisboa.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 19:11:07.981 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 19:11:07.991 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:13:10.029 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/shellshock-20261121T191433Z
+inicio 19:14:33.820 bot-3=10.225.218.190
+19:14:33.823 resposta 404
+19:14:33.823 resposta 404
+firewall 19:14:34.512 DROP
+firewall 19:16:34.399 none
+sonda 19:14:33 80=200 8080=000
+sonda 19:14:41 80=000 8080=000
+sonda 19:16:38 80=200 8080=200
+regra 100210: 1x, primeira às 19:14:34.002 UTC - Shellshock (CVE-2014-6271) contra o gateway, origem 10.225.218.190.
+regra 651: 1x, primeira às 19:14:34.020 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:16:36.057 UTC - Host Unblocked by firewall-drop Active Response
+19:17:14.964 repetição 4/5
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/rajada-http-20261121T191720Z
+inicio 19:17:20.053 bot-1=10.225.218.197 porta=80
+ataque 19:17:25.058
+Complete requests:      40
+Failed requests:        29
+Non-2xx responses:      29
+legítimo 200: 168
+legítimo: média 2.1 ms, máximo 3.2 ms
+firewall 19:17:26.611 DROP
+firewall 19:19:27.647 none
+sonda 19:17:25 80=200 8080=200
+sonda 19:17:30 80=000 8080=000
+sonda 19:19:27 80=200 8080=200
+regra 100204: 27x, primeira às 19:17:26.043 UTC - Gateway rejeitou um pedido de 10.225.218.197 por excesso de taxa (429).
+regra 100206: 2x, primeira às 19:17:26.062 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 651: 2x, primeira às 19:17:28.018 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:19:28.032 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/ddos-rapido-20261121T192018Z
+inicio 19:20:18.730 modo=rapido pausa=0.1s duracao=20s
+bot-1=10.225.218.197
+bot-2=10.225.218.180
+bot-3=10.225.218.190
+bot-1: 13×000 40×200 13×429 
+  primeiro 000 (bloqueado) às 19:20:30
+bot-2: 13×000 40×200 13×429 
+  primeiro 000 (bloqueado) às 19:20:30
+bot-3: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 19:20:30
+legítimo 200: 59
+legítimo: média 2.1 ms, máximo 2.9 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+regra 100205: 2x, primeira às 19:20:28.144 UTC - Volume elevado: 10.225.218.190 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 19:20:30.141 UTC - Possivel DoS: 10.225.218.190 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 19:20:28.149 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.197).
+regra 100231: 1x, primeira às 19:21:04.036 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 4x, primeira às 19:21:06.033 UTC - Correlacao no site lisboa: ataque 100207 e sintoma SharedGatewayRequestSurge em 120 segundos.
+regra 651: 3x, primeira às 19:20:32.042 UTC - Host Blocked by firewall-drop Active Response
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100207', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '35.887000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.190', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '33.895000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.180', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '33.880000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '33.880000'}
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/spam-20261121T192242Z
+inicio 19:22:42.593 bot-2=10.225.218.180
+antes: caixa=791 quarentena=62
+ataque 19:22:42.870
+fim-ataque 19:23:04.803
+depois: caixa=793 quarentena=75
+spam aceite pelo SMTP: 13 de 40
+recusado:       5 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:       6 result=Yes score=12.6 client=10.225.218.180
+filtro:       7 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 13
+limite anvil: 0
+firewall 19:22:44.559 DROP
+firewall 19:24:46.127 none
+sonda 19:23:05 sem ligação: TimeoutError
+sonda 19:24:49 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=791 quarentena=62
+caixa e fila depois: caixa=793 quarentena=75
+regra 100221: 11x, primeira às 19:22:44.122 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 2x, primeira às 19:22:44.258 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 2x, primeira às 19:22:46.043 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:24:46.097 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/publicacao-porto-20261121T192614Z
+inicio 19:26:14.857 alvo=https://10.225.218.110:30442/ingest
+19:26:15 sem credencial     401
+19:26:15 sem credencial     401
+19:26:15 token forjado      403
+19:26:15 token forjado      403
+19:26:15 token forjado      403
+19:26:15 ID com ../         400
+19:26:15 ID inexistente     403
+19:26:15 HTTP simples       000
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de porto: antes 0, depois 0
+Alertmanager: porto active inibido por nada
+firewall k3s-master 19:26:16.320 DROP
+firewall k3s-master 19:28:17.323 none
+sonda 19:26:15 403
+sonda 19:26:22 000
+sonda 19:28:19 403
+regra 100245: 1x, primeira às 19:26:50.067 UTC - Ingestão: pedidos recusados por autenticação ou autorização em porto/ingestion-service.
+regra 100246: 8x, primeira às 19:26:16.071 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.porto.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 19:26:16.078 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 19:26:18.072 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:28:18.092 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/shellshock-20261121T192940Z
+inicio 19:29:40.852 bot-3=10.225.218.190
+19:29:40.854 resposta 404
+19:29:40.854 resposta 404
+firewall 19:29:42.118 DROP
+firewall 19:31:43.295 none
+sonda 19:29:41 80=200 8080=200
+sonda 19:29:46 80=000 8080=000
+sonda 19:31:43 80=200 8080=200
+regra 100210: 1x, primeira às 19:29:42.090 UTC - Shellshock (CVE-2014-6271) contra o gateway, origem 10.225.218.190.
+regra 651: 1x, primeira às 19:29:42.110 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:31:44.145 UTC - Host Unblocked by firewall-drop Active Response
+19:32:22.061 repetição 5/5
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/rajada-http-20261121T193227Z
+inicio 19:32:27.164 bot-1=10.225.218.197 porta=80
+ataque 19:32:32.168
+Complete requests:      40
+Failed requests:        29
+Non-2xx responses:      29
+legítimo 200: 168
+legítimo: média 2.1 ms, máximo 4.7 ms
+firewall 19:32:34.299 DROP
+firewall 19:34:35.812 none
+sonda 19:32:32 80=200 8080=200
+sonda 19:32:37 80=000 8080=000
+sonda 19:34:34 80=200 8080=200
+regra 100204: 27x, primeira às 19:32:34.142 UTC - Gateway rejeitou um pedido de 10.225.218.197 por excesso de taxa (429).
+regra 100206: 2x, primeira às 19:32:34.159 UTC - Possivel DoS: 10.225.218.197 excedeu repetidamente o limite de pedidos do gateway.
+regra 651: 2x, primeira às 19:32:36.110 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:34:36.125 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/ddos-rapido-20261121T193525Z
+inicio 19:35:25.864 modo=rapido pausa=0.1s duracao=20s
+bot-1=10.225.218.197
+bot-2=10.225.218.180
+bot-3=10.225.218.190
+bot-1: 12×000 45×200 15×429 
+  primeiro 000 (bloqueado) às 19:35:38
+bot-2: 12×000 45×200 15×429 
+  primeiro 000 (bloqueado) às 19:35:38
+bot-3: 12×000 45×200 15×429 
+  primeiro 000 (bloqueado) às 19:35:38
+legítimo 200: 59
+legítimo: média 2.1 ms, máximo 2.9 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+regra 100205: 2x, primeira às 19:35:36.238 UTC - Volume elevado: 10.225.218.180 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 19:35:38.163 UTC - Possivel DoS: 10.225.218.180 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 19:35:36.246 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.197).
+regra 100231: 1x, primeira às 19:36:04.120 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 4x, primeira às 19:36:06.112 UTC - Correlacao no site lisboa: ataque 100207 e sintoma SharedGatewayRequestSurge em 120 segundos.
+regra 651: 3x, primeira às 19:35:40.132 UTC - Host Blocked by firewall-drop Active Response
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100207', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '27.874000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.180', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '25.957000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.190', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '25.952000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '25.937000'}
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/spam-20261121T193749Z
+inicio 19:37:49.755 bot-2=10.225.218.180
+antes: caixa=793 quarentena=75
+ataque 19:37:50.021
+fim-ataque 19:38:08.711
+depois: caixa=795 quarentena=95
+spam aceite pelo SMTP: 20 de 40
+recusado:       1 SMTPSenderRefused: (450, b'4.7.1 Error: too much mail from 10.225.218.180', 'promo20@bot-2.incus')
+recusado:       4 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:      10 result=Yes score=12.6 client=10.225.218.180
+filtro:      10 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 20
+limite anvil: 1
+firewall 19:37:52.880 DROP
+firewall 19:39:55.728 none
+sonda 19:38:08 sem ligação: TimeoutError
+sonda 19:40:05 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=793 quarentena=75
+caixa e fila depois: caixa=795 quarentena=95
+regra 100221: 16x, primeira às 19:37:52.153 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 4x, primeira às 19:37:52.289 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 4x, primeira às 19:37:54.131 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:39:56.193 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/publicacao-lisboa-20261121T194121Z
+inicio 19:41:21.964 alvo=https://10.225.218.110:30441/ingest
+19:41:22 sem credencial     401
+19:41:22 sem credencial     401
+19:41:22 token forjado      403
+19:41:22 token forjado      403
+19:41:22 token forjado      403
+19:41:22 ID com ../         400
+19:41:22 ID inexistente     403
+19:41:22 HTTP simples       000
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de lisboa: antes 0, depois 0
+Alertmanager: lisboa active inibido por nada
+firewall k3s-master 19:41:24.752 DROP
+firewall k3s-master 19:43:25.605 none
+sonda 19:41:22 403
+sonda 19:41:29 000
+sonda 19:43:26 403
+regra 100245: 1x, primeira às 19:42:04.154 UTC - Ingestão: pedidos recusados por autenticação ou autorização em lisboa/ingestion-service.
+regra 100246: 8x, primeira às 19:41:24.159 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.lisboa.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 19:41:24.166 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 19:41:26.160 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:43:26.170 UTC - Host Unblocked by firewall-drop Active Response
+Evidência em /home/kali/Projects/ssle/evidencias/repeticoes-20261121T183121Z/shellshock-20261121T194448Z
+inicio 19:44:48.730 bot-3=10.225.218.190
+19:44:48.733 resposta 404
+19:44:48.733 resposta 404
+firewall 19:44:50.621 DROP
+firewall 19:46:51.571 none
+sonda 19:44:48 80=200 8080=200
+sonda 19:44:53 80=000 8080=000
+sonda 19:46:51 80=200 8080=200
+regra 100210: 1x, primeira às 19:44:50.183 UTC - Shellshock (CVE-2014-6271) contra o gateway, origem 10.225.218.190.
+regra 651: 1x, primeira às 19:44:52.184 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:46:52.241 UTC - Host Unblocked by firewall-drop Active Response

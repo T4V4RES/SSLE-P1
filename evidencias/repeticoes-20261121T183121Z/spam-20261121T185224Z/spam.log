@@ -1,0 +1,26 @@
+18:52:24.709 campanha #0 OK
+18:52:24.817 campanha #1 OK
+18:52:24.924 campanha #2 OK
+18:52:25.031 campanha #3 OK
+18:52:25.138 campanha #4 OK
+18:52:25.244 campanha #5 OK
+18:52:25.352 campanha #6 OK
+18:52:25.459 campanha #7 OK
+18:52:25.565 campanha #8 OK
+18:52:25.672 campanha #9 OK
+18:52:25.778 campanha #10 OK
+18:52:25.884 campanha #11 OK
+18:52:25.991 campanha #12 OK
+18:52:26.098 campanha #13 OK
+18:52:26.205 campanha #14 OK
+18:52:26.312 campanha #15 OK
+18:52:26.418 campanha #16 OK
+18:52:26.525 campanha #17 OK
+18:52:26.631 campanha #18 OK
+18:52:26.738 campanha #19 OK
+18:52:26.844 campanha #20 FALHOU TimeoutError: timed out
+18:52:30.946 campanha #21 FALHOU TimeoutError: timed out
+18:52:35.050 campanha #22 FALHOU TimeoutError: timed out
+18:52:39.154 campanha #23 FALHOU TimeoutError: timed out
+18:52:43.259 campanha #24 FALHOU TimeoutError: timed out
+18:52:43.259 campanha desiste após 5 falhas seguidas

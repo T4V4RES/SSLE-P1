@@ -1,0 +1,2 @@
+# Aplicado pelo cleanup tambem na reinjecao feita pelo filtro de spam.
+/^X-Spam-Flag: YES/ HOLD quarentena: marcada como spam pelo SpamAssassin

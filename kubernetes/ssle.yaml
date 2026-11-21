@@ -1,0 +1,486 @@
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: ssle-project
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  namespace: ssle-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: registry
+        image: ssle/registry:project1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5050
+          name: metrics
+        env:
+        - name: PORT
+          value: '5050'
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5050
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5050
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5050
+          failureThreshold: 30
+          periodSeconds: 5
+      automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: ssle-project
+spec:
+  type: ClusterIP
+  selector:
+    app: registry
+  ports:
+  - port: 5050
+    targetPort: 5050
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: storage-data
+  namespace: ssle-project
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage
+  namespace: ssle-project
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: storage
+  template:
+    metadata:
+      labels:
+        app: storage
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: storage
+        image: ssle/storage:project1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5002
+          name: metrics
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: REGISTRY_URL
+          value: http://registry:5050
+        - name: SERVICE_URL
+          value: http://$(POD_IP):5002
+        - name: INSTANCE_ID
+          value: pt.coimbra.dc1.rack1.$(NODE_NAME).storage.$(POD_NAME)
+        - name: TEMP_DB
+          value: /data/temp_data.db
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: tmp
+          mountPath: /tmp
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          failureThreshold: 30
+          periodSeconds: 5
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: storage-data
+      - name: tmp
+        emptyDir: {}
+      automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage
+  namespace: ssle-project
+spec:
+  type: ClusterIP
+  selector:
+    app: storage
+  ports:
+  - port: 5002
+    targetPort: 5002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion
+  namespace: ssle-project
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: ingestion
+        image: ssle/ingestion:project1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5001
+          name: metrics
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: REGISTRY_URL
+          value: http://registry:5050
+        - name: SERVICE_URL
+          value: http://$(POD_IP):5001
+        - name: INSTANCE_ID
+          value: pt.coimbra.dc1.rack1.$(NODE_NAME).ingestion.$(POD_NAME)
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5001
+          failureThreshold: 30
+          periodSeconds: 5
+      automountServiceAccountToken: false
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: ingestion
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingestion
+  namespace: ssle-project
+spec:
+  type: ClusterIP
+  selector:
+    app: ingestion
+  ports:
+  - port: 5001
+    targetPort: 5001
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics
+  namespace: ssle-project
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: analytics
+  template:
+    metadata:
+      labels:
+        app: analytics
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: analytics
+        image: ssle/analytics:project1
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5003
+          name: metrics
+        env:
+        - name: POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: REGISTRY_URL
+          value: http://registry:5050
+        - name: SERVICE_URL
+          value: http://$(POD_IP):5003
+        - name: INSTANCE_ID
+          value: pt.coimbra.dc1.rack1.$(NODE_NAME).analytics.$(POD_NAME)
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          failureThreshold: 30
+          periodSeconds: 5
+      automountServiceAccountToken: false
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: analytics
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics
+  namespace: ssle-project
+spec:
+  type: ClusterIP
+  selector:
+    app: analytics
+  ports:
+  - port: 5003
+    targetPort: 5003
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensor
+  namespace: ssle-project
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sensor
+  template:
+    metadata:
+      labels:
+        app: sensor
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: sensor
+        image: ssle/sensor:project1
+        imagePullPolicy: Never
+        env:
+        - name: NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: REGISTRY_URL
+          value: http://registry:5050
+        - name: DEVICE_ID
+          value: pt.coimbra.dc1.rack1.$(NODE_NAME).sensor.temperature.01
+        - name: INTERVAL_MS
+          value: '5000'
+        resources:
+          requests:
+            cpu: 5m
+            memory: 8Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+      automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: project-budget
+  namespace: ssle-project
+spec:
+  hard:
+    requests.cpu: '2'
+    requests.memory: 1Gi
+    limits.cpu: '4'
+    limits.memory: 2Gi
+    pods: '20'
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: project-isolation
+  namespace: ssle-project
+spec:
+  podSelector: {}
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector: {}
+  egress:
+  - to:
+    - podSelector: {}
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - protocol: UDP
+      port: 53
+    - protocol: TCP
+      port: 53

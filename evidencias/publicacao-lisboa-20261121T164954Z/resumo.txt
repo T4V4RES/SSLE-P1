@@ -1,0 +1,9 @@
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de lisboa: antes 0, depois 0
+Alertmanager: lisboa active inibido por nada
+espera até ao alerta: 83 s
+regra 100231: 2x, primeira às 16:50:12.589 UTC - Prometheus: SiteMonitoringUnreachable em lisboa/ ().
+regra 100245: 1x, primeira às 16:51:12.641 UTC - Ingestão: pedidos recusados por autenticação ou autorização em lisboa/ingestion-service.

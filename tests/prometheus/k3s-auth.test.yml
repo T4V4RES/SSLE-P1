@@ -1,0 +1,24 @@
+rule_files:
+  - ../../kubernetes/site-rules.yml
+evaluation_interval: 15s
+tests:
+  - interval: 15s
+    input_series:
+      - series: 'ssle_http_auth_rejections_total{job="ssle",site="lisboa",service="ingestion-service",replica="ingest-a"}'
+        values: '0x19 2x8'
+      - series: 'ssle_http_auth_rejections_total{job="ssle",site="lisboa",service="ingestion-service",replica="ingest-b"}'
+        values: '0x19 2x8'
+      - series: 'ssle_http_auth_rejections_total{job="ssle",site="porto",service="ingestion-service",replica="ingest-a"}'
+        values: '0x19 1x8'
+      - series: 'ssle_http_auth_rejections_total{job="ssle",site="porto",service="analytics-service",replica="analysis-a"}'
+        values: '0x19 12x8'
+    alert_rule_test:
+      - eval_time: 4m
+        alertname: SsleIngestionAuthRejections
+        exp_alerts: []
+      - eval_time: 5m15s
+        alertname: SsleIngestionAuthRejections
+        exp_alerts:
+          - exp_labels: {severity: warning, kind: security, site: lisboa, service: ingestion-service}
+            exp_annotations:
+              summary: 'Pedidos de ingestão recusados por autenticação ou autorização'

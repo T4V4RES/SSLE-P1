@@ -1,0 +1,40 @@
+16:36:05.720 campanha #0 OK
+16:36:05.829 campanha #1 OK
+16:36:05.936 campanha #2 OK
+16:36:06.043 campanha #3 OK
+16:36:06.150 campanha #4 OK
+16:36:06.257 campanha #5 OK
+16:36:06.363 campanha #6 OK
+16:36:06.470 campanha #7 OK
+16:36:06.577 campanha #8 FALHOU TimeoutError: timed out
+16:36:10.683 campanha #9 FALHOU TimeoutError: timed out
+16:36:14.786 campanha #10 FALHOU TimeoutError: timed out
+16:36:18.892 campanha #11 FALHOU TimeoutError: timed out
+16:36:22.997 campanha #12 FALHOU TimeoutError: timed out
+16:36:27.102 campanha #13 FALHOU TimeoutError: timed out
+16:36:31.207 campanha #14 FALHOU TimeoutError: timed out
+16:36:35.314 campanha #15 FALHOU TimeoutError: timed out
+16:36:39.420 campanha #16 FALHOU TimeoutError: timed out
+16:36:43.521 campanha #17 FALHOU TimeoutError: timed out
+16:36:47.626 campanha #18 FALHOU TimeoutError: timed out
+16:36:51.730 campanha #19 FALHOU TimeoutError: timed out
+16:36:55.834 campanha #20 FALHOU TimeoutError: timed out
+16:36:59.938 campanha #21 FALHOU TimeoutError: timed out
+16:37:04.043 campanha #22 FALHOU TimeoutError: timed out
+16:37:08.146 campanha #23 FALHOU TimeoutError: timed out
+16:37:12.251 campanha #24 FALHOU TimeoutError: timed out
+16:37:16.354 campanha #25 FALHOU TimeoutError: timed out
+16:37:20.457 campanha #26 FALHOU TimeoutError: timed out
+16:37:24.562 campanha #27 FALHOU TimeoutError: timed out
+16:37:28.667 campanha #28 FALHOU TimeoutError: timed out
+16:37:32.771 campanha #29 FALHOU TimeoutError: timed out
+16:37:36.874 campanha #30 FALHOU TimeoutError: timed out
+16:37:40.979 campanha #31 FALHOU TimeoutError: timed out
+16:37:45.082 campanha #32 FALHOU TimeoutError: timed out
+16:37:49.186 campanha #33 FALHOU TimeoutError: timed out
+16:37:53.292 campanha #34 FALHOU TimeoutError: timed out
+16:37:57.398 campanha #35 FALHOU TimeoutError: timed out
+16:38:01.504 campanha #36 FALHOU TimeoutError: timed out
+16:38:05.606 campanha #37 OK
+16:38:09.050 campanha #38 OK
+16:38:09.157 campanha #39 OK

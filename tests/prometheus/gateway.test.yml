@@ -1,0 +1,41 @@
+# Alerta de pico na entrada partilhada com limiar relativo à referência.
+rule_files:
+  - ../../monitorizacao/shared-gateway.yml
+evaluation_interval: 15s
+tests:
+  # Sem tráfego anterior, o limiar é o mínimo de 120 pedidos por minuto:
+  # 100 pedidos num minuto (rajada de 40 e cliente a 1/s) não chegam.
+  - interval: 15s
+    input_series:
+      - series: 'nginx_http_requests_total{job="gateway"}'
+        values: '0+0x8 0+25x4 100+0x20'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: SharedGatewayRequestSurge
+        exp_alerts: []
+  # Cliente legítimo a 1 pedido/s durante 30 min (60/min, limiar 180) e depois
+  # três bots: cerca de 260 pedidos num minuto disparam o alerta.
+  - interval: 15s
+    input_series:
+      - series: 'nginx_http_requests_total{job="gateway"}'
+        values: '0+15x140 2100+65x8 2620+15x20'
+    alert_rule_test:
+      - eval_time: 34m
+        alertname: SharedGatewayRequestSurge
+        exp_alerts: []
+      - eval_time: 37m
+        alertname: SharedGatewayRequestSurge
+        exp_alerts:
+          - exp_labels: {severity: warning, site: gateway}
+            exp_annotations:
+              summary: 'Pico de pedidos na entrada partilhada'
+              description: '260 pedidos no último minuto.'
+  # Um cliente legítimo mais ativo (3 pedidos/s) eleva a referência e fica abaixo.
+  - interval: 15s
+    input_series:
+      - series: 'nginx_http_requests_total{job="gateway"}'
+        values: '0+45x200'
+    alert_rule_test:
+      - eval_time: 45m
+        alertname: SharedGatewayRequestSurge
+        exp_alerts: []

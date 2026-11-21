@@ -1,0 +1,19 @@
+spam aceite pelo SMTP: 20 de 40
+recusado:       1 SMTPSenderRefused: (450, b'4.7.1 Error: too much mail from 10.225.218.180', 'promo20@bot-2.incus')
+recusado:       4 TimeoutError: timed out
+legítimo antes: OK | durante o bloqueio: OK
+filtro:       2 result=No score=0.0 client=10.225.218.210
+filtro:      10 result=Yes score=12.6 client=10.225.218.180
+filtro:      10 result=Yes score=6.2 client=10.225.218.180
+quarentena (hold): 20
+limite anvil: 1
+firewall 19:37:52.880 DROP
+firewall 19:39:55.728 none
+sonda 19:38:08 sem ligação: TimeoutError
+sonda 19:40:05 ligou: 220 lis-mail.incus ESMTP
+caixa e fila antes: caixa=793 quarentena=75
+caixa e fila depois: caixa=795 quarentena=95
+regra 100221: 16x, primeira às 19:37:52.153 UTC - Mensagem marcada como spam (origem 10.225.218.180, score 6.2).
+regra 100222: 4x, primeira às 19:37:52.289 UTC - Spam em volume: 10.225.218.180 enviou varias mensagens marcadas em 60s.
+regra 651: 4x, primeira às 19:37:54.131 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 19:39:56.193 UTC - Host Unblocked by firewall-drop Active Response

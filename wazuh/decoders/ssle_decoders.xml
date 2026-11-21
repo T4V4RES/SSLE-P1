@@ -1,0 +1,27 @@
+<!-- Decoders proprios do projeto SSLE -->
+
+<!-- Linhas escritas pelo filtro de spam (logger -t spamfilter):
+     spamfilter: result=Yes score=7.5 client=10.0.0.5 from=<a@b> to=<c@d> tests=... -->
+<decoder name="ssle-spamfilter">
+  <program_name>spamfilter</program_name>
+</decoder>
+
+<!-- Captura resultado, score e IP de origem (client). O srcip e usado pela
+     resposta ativa; from/to ficam de fora para evitar ambiguidade na regex. -->
+<decoder name="ssle-spamfilter-fields">
+  <parent>ssle-spamfilter</parent>
+  <regex offset="after_parent">result=(\w+) score=(\S+) client=(\d+.\d+.\d+.\d+)</regex>
+  <order>spam_result,spam_score,srcip</order>
+</decoder>
+
+<!-- Recusas da ingestao, no log do contentor (formato CRI dos nos K3s):
+     2026-11-21T17:30:00.1Z stderr F ssle-ingestion: auth_reject status=403 client=10.0.0.9 device=pt.lisboa... -->
+<decoder name="ssle-ingestion">
+  <prematch>ssle-ingestion: auth_reject </prematch>
+</decoder>
+
+<decoder name="ssle-ingestion-fields">
+  <parent>ssle-ingestion</parent>
+  <regex>status=(\d+) client=(\d+.\d+.\d+.\d+) device=(\S+)</regex>
+  <order>ingest_status,srcip,sensor_id</order>
+</decoder>

@@ -1,0 +1,17 @@
+bot-1: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 18:34:36
+bot-2: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 18:34:36
+bot-3: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 18:34:36
+legítimo 200: 59
+legítimo: média 2.2 ms, máximo 2.6 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+regra 100205: 2x, primeira às 18:34:34.476 UTC - Volume elevado: 10.225.218.197 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 18:34:36.449 UTC - Possivel DoS: 10.225.218.180 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 18:34:34.487 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.190).
+regra 651: 3x, primeira às 18:34:38.377 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 3x, primeira às 18:36:38.402 UTC - Host Unblocked by firewall-drop Active Response
+sem correlação 100232

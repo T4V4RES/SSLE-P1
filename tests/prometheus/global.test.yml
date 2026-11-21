@@ -1,0 +1,56 @@
+# Testes das regras do Prometheus global com series sinteticas (promtool test rules).
+# Nao substituem o ensaio na VM: verificam a logica das regras isoladamente.
+rule_files:
+  - ../../monitorizacao/rules-global.yml
+evaluation_interval: 30s
+tests:
+  # Um site degradado nao basta; dois sites degradados dao um alerta por site;
+  # quando um recupera, os alertas desaparecem.
+  - interval: 30s
+    input_series:
+      - series: 'site:ssle_http_latency_p95:1m{service="ingestion-service", site="lisbon"}'
+        values: '0.02x3 0.9x12 0.02x6'
+      - series: 'site:ssle_http_latency_p95:1m{service="ingestion-service", site="porto"}'
+        values: '0.02x7 0.9x4 0.02x10'
+      - series: 'site:ssle_http_latency_p95:1m{service="analytics-service", site="porto"}'
+        values: '0.9x21'
+    alert_rule_test:
+      - eval_time: 3m
+        alertname: MultiSiteDegradation
+        exp_alerts: []
+      - eval_time: 5m30s
+        alertname: MultiSiteDegradation
+        exp_alerts:
+          - exp_labels: {severity: critical, service: ingestion-service, site: lisbon}
+            exp_annotations:
+              summary: "ingestion-service degradado em varios sites, entre eles lisbon"
+              description: "p95 de 900ms em lisbon; o mesmo servico esta degradado noutro site."
+          - exp_labels: {severity: critical, service: ingestion-service, site: porto}
+            exp_annotations:
+              summary: "ingestion-service degradado em varios sites, entre eles porto"
+              description: "p95 de 900ms em porto; o mesmo servico esta degradado noutro site."
+      - eval_time: 8m
+        alertname: MultiSiteDegradation
+        exp_alerts: []
+
+  # O global deixa de conseguir federar o Porto durante mais de um minuto.
+  - interval: 30s
+    input_series:
+      - series: 'up{job="federate", site="porto", instance="prom-opo.incus:9090"}'
+        values: '1x2 0x6 1x4'
+      - series: 'up{job="federate", site="lisbon", instance="prom-lis.incus:9090"}'
+        values: '1x12'
+    alert_rule_test:
+      - eval_time: 1m30s
+        alertname: SiteMonitoringUnreachable
+        exp_alerts: []
+      - eval_time: 3m
+        alertname: SiteMonitoringUnreachable
+        exp_alerts:
+          - exp_labels: {severity: critical, job: federate, site: porto, instance: "prom-opo.incus:9090"}
+            exp_annotations:
+              summary: "Prometheus do site prom-opo.incus:9090 inacessivel"
+              description: "Perdeu-se a visibilidade sobre um site inteiro."
+      - eval_time: 5m
+        alertname: SiteMonitoringUnreachable
+        exp_alerts: []

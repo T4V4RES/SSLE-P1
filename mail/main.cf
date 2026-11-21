@@ -1,0 +1,41 @@
+compatibility_level = 3.9
+
+myhostname = @HOST@.incus
+myorigin = $myhostname
+mydestination = $myhostname, @HOST@, localhost.localdomain, localhost
+inet_interfaces = all
+inet_protocols = ipv4
+mynetworks = 127.0.0.0/8
+
+smtpd_banner = $myhostname ESMTP
+biff = no
+alias_maps = hash:/etc/aliases
+alias_database = hash:/etc/aliases
+recipient_delimiter = +
+mailbox_size_limit = 51200000
+message_size_limit = 1048576
+
+# Servidor so local: nao faz relay para fora
+smtpd_relay_restrictions = permit_mynetworks reject_unauth_destination
+smtpd_helo_required = yes
+smtpd_recipient_restrictions =
+    permit_mynetworks,
+    reject_unauth_destination,
+    reject_unlisted_recipient
+default_transport = error
+relay_transport = error
+
+# Quarentena: a mensagem que o SpamAssassin marca volta ao Postfix pelo
+# sendmail e fica na fila hold, fora da caixa (postqueue -p, postsuper -H/-d).
+header_checks = regexp:/etc/postfix/header_checks
+
+# Limites por cliente (anvil), por minuto. Travam o volume que escape a
+# classificacao; um utilizador normal fica muito abaixo.
+anvil_rate_time_unit = 60s
+smtpd_client_message_rate_limit = 20
+smtpd_client_connection_rate_limit = 30
+smtpd_client_connection_count_limit = 20
+smtpd_client_recipient_rate_limit = 100
+smtpd_error_sleep_time = 1s
+smtpd_soft_error_limit = 10
+smtpd_hard_error_limit = 20

@@ -1,0 +1,15 @@
+respostas:       1 000
+respostas:       1 400
+respostas:       2 401
+respostas:       4 403
+leituras 99.9 nas últimas 50 de porto: antes 0, depois 0
+Alertmanager: porto active inibido por nada
+firewall k3s-master 18:55:57.952 DROP
+firewall k3s-master 18:57:58.941 none
+sonda 18:55:59 000
+sonda 18:58:03 403
+regra 100245: 1x, primeira às 18:56:34.468 UTC - Ingestão: pedidos recusados por autenticação ou autorização em porto/ingestion-service.
+regra 100246: 7x, primeira às 18:55:57.503 UTC - Ingestao recusou uma publicacao de 10.225.218.190 (HTTP 401, sensor pt.porto.dc1.rack1.lab.sensor.temperature.01).
+regra 100247: 1x, primeira às 18:55:57.512 UTC - Publicacoes recusadas repetidas de 10.225.218.190: origem bloqueada no no K3s.
+regra 651: 1x, primeira às 18:55:57.768 UTC - Host Blocked by firewall-drop Active Response
+regra 652: 1x, primeira às 18:57:59.565 UTC - Host Unblocked by firewall-drop Active Response

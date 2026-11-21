@@ -1,0 +1,12 @@
+modo com-protecao
+bot-1 140×000 bot-1 20×200 bot-1 567×429 
+bot-2 140×000 bot-2 18×200 bot-2 457×429 
+bot-3 140×000 bot-3 18×200 bot-3 382×429 
+legítimo: 68/68 200, falhas 0, mediana 2.3 ms, p95 2.9 ms, máximo 338.7 ms
+Prometheus (consulta posterior, ver prometheus.txt): p95 analise=0.145 s; pedidos/min no gateway=2012.000; p95 ingestao/storage lisboa=0.145
+modo sem-protecao
+bot-1 720×200 
+bot-2 722×200 
+bot-3 734×200 
+legítimo: 60/60 200, falhas 0, mediana 2.4 ms, p95 681.0 ms, máximo 776.3 ms
+Prometheus (consulta posterior, ver prometheus.txt): p95 analise=0.096 s; pedidos/min no gateway=2953.333; p95 ingestao/storage lisboa=0.096

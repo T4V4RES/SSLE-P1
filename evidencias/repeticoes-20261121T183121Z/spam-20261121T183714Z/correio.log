@@ -1,0 +1,119 @@
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from client-user.incus[10.225.218.210]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: 0BC992CAB91: client=client-user.incus[10.225.218.210]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 0BC992CAB91: message-id=<179528623500.193.17458475693172605045@client-user.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from client-user.incus[10.225.218.210] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17404]: result=No score=0.0 client=10.225.218.210 from=<bob@client-user.incus> to=<alice@lis-mail.incus> tests=none
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 23F792CAB95: message-id=<179528623500.193.17458475693172605045@client-user.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2.incus[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: 369962CAB91: client=bot-2.incus[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 369962CAB91: message-id=<179528623521.193.14016352060336175652@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2.incus[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17422]: result=Yes score=6.2 client=10.225.218.180 from=<promo0@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 4A14F2CAB95: hold: header X-Spam-Flag: YES from local; from=<promo0@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 4A14F2CAB95: message-id=<179528623521.193.14016352060336175652@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: 50B1B2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 50B1B2C66ED: message-id=<179528623532.193.7446077673440848905@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17439]: result=Yes score=12.6 client=10.225.218.180 from=<promo1@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 64CAD2CF0BB: hold: header X-Spam-Flag: YES from local; from=<promo1@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 64CAD2CF0BB: message-id=<179528623532.193.7446077673440848905@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: 6ABBB2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 6ABBB2C66ED: message-id=<179528623543.193.13794607278398537442@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17456]: result=Yes score=6.2 client=10.225.218.180 from=<promo2@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 7DDA82CF0BD: hold: header X-Spam-Flag: YES from local; from=<promo2@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 7DDA82CF0BD: message-id=<179528623543.193.13794607278398537442@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: 84DA72C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 84DA72C66ED: message-id=<179528623554.193.16308984912702857595@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17474]: result=Yes score=12.6 client=10.225.218.180 from=<promo3@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 976092CF0BE: hold: header X-Spam-Flag: YES from local; from=<promo3@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 976092CF0BE: message-id=<179528623554.193.16308984912702857595@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: 9EF5B2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: 9EF5B2C66ED: message-id=<179528623564.193.15724807987750992995@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17491]: result=Yes score=6.2 client=10.225.218.180 from=<promo4@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: B1D512CF0BF: hold: header X-Spam-Flag: YES from local; from=<promo4@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: B1D512CF0BF: message-id=<179528623564.193.15724807987750992995@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: B912E2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: B912E2C66ED: message-id=<179528623575.193.11650542209458780921@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17508]: result=Yes score=12.6 client=10.225.218.180 from=<promo5@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: CC8282CF0C2: hold: header X-Spam-Flag: YES from local; from=<promo5@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: CC8282CF0C2: message-id=<179528623575.193.11650542209458780921@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: D31B02C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: D31B02C66ED: message-id=<179528623586.193.5421324415293973473@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:15+00:00 lis-mail spamfilter[17525]: result=Yes score=6.2 client=10.225.218.180 from=<promo6@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: E801D2CF0C8: hold: header X-Spam-Flag: YES from local; from=<promo6@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: E801D2CF0C8: message-id=<179528623586.193.5421324415293973473@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: EDC882C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:15+00:00 lis-mail postfix/cleanup[17387]: EDC882C66ED: message-id=<179528623596.193.3240830103000129341@bot-2.incus>
+2026-11-21T18:37:15+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17542]: result=Yes score=12.6 client=10.225.218.180 from=<promo7@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 0DFB82CF0C9: hold: header X-Spam-Flag: YES from local; from=<promo7@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 0DFB82CF0C9: message-id=<179528623596.193.3240830103000129341@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: 13B9B2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 13B9B2C66ED: message-id=<179528623607.193.10733609427154386093@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17560]: result=Yes score=6.2 client=10.225.218.180 from=<promo8@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 27BB52CF0D1: hold: header X-Spam-Flag: YES from local; from=<promo8@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 27BB52CF0D1: message-id=<179528623607.193.10733609427154386093@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: 2DEA82C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 2DEA82C66ED: message-id=<179528623618.193.338013365213885671@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17577]: result=Yes score=12.6 client=10.225.218.180 from=<promo9@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 410122CF0D2: hold: header X-Spam-Flag: YES from local; from=<promo9@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 410122CF0D2: message-id=<179528623618.193.338013365213885671@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: 4812A2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 4812A2C66ED: message-id=<179528623629.193.8093883138008826831@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17594]: result=Yes score=6.2 client=10.225.218.180 from=<promo10@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 5B3272CF0D3: hold: header X-Spam-Flag: YES from local; from=<promo10@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 5B3272CF0D3: message-id=<179528623629.193.8093883138008826831@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: 6219D2C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 6219D2C66ED: message-id=<179528623639.193.591770524918653460@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17611]: result=Yes score=12.6 client=10.225.218.180 from=<promo11@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 74FD12CF0D4: hold: header X-Spam-Flag: YES from local; from=<promo11@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 74FD12CF0D4: message-id=<179528623639.193.591770524918653460@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: 7C3672C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 7C3672C66ED: message-id=<179528623650.193.16428190618217223415@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17628]: result=Yes score=6.2 client=10.225.218.180 from=<promo12@bot-2.incus> to=<alice@lis-mail.incus> tests=DRUGS_ERECTILE,DRUG_ED_CAPS,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 8E69A2CF0D5: hold: header X-Spam-Flag: YES from local; from=<promo12@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 8E69A2CF0D5: message-id=<179528623650.193.16428190618217223415@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: connect from bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: 966352C66ED: client=bot-2[10.225.218.180]
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: 966352C66ED: message-id=<179528623661.193.5000521265684977980@bot-2.incus>
+2026-11-21T18:37:16+00:00 lis-mail postfix/smtpd[17382]: disconnect from bot-2[10.225.218.180] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:16+00:00 lis-mail spamfilter[17649]: result=Yes score=12.6 client=10.225.218.180 from=<promo13@bot-2.incus> to=<alice@lis-mail.incus> tests=ADVANCE_FEE_4_NEW_MONEY,
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: AE6AC2CF0F1: hold: header X-Spam-Flag: YES from local; from=<promo13@bot-2.incus> to=<alice@lis-mail.incus>: quarentena: marcada como spam pelo SpamAssassin
+2026-11-21T18:37:16+00:00 lis-mail postfix/cleanup[17387]: AE6AC2CF0F1: message-id=<179528623661.193.5000521265684977980@bot-2.incus>
+2026-11-21T18:37:37+00:00 lis-mail postfix/smtpd[17382]: connect from client-user[10.225.218.210]
+2026-11-21T18:37:37+00:00 lis-mail postfix/smtpd[17382]: 458F62C66ED: client=client-user[10.225.218.210]
+2026-11-21T18:37:37+00:00 lis-mail postfix/cleanup[17387]: 458F62C66ED: message-id=<179528625728.194.3915832327510476182@client-user.incus>
+2026-11-21T18:37:37+00:00 lis-mail postfix/smtpd[17382]: disconnect from client-user[10.225.218.210] ehlo=1 mail=1 rcpt=1 data=1 quit=1 commands=5
+2026-11-21T18:37:37+00:00 lis-mail spamfilter[17702]: result=No score=0.0 client=10.225.218.210 from=<bob@client-user.incus> to=<alice@lis-mail.incus> tests=none
+2026-11-21T18:37:37+00:00 lis-mail postfix/cleanup[17387]: 5B3202CF104: message-id=<179528625728.194.3915832327510476182@client-user.incus>
+2026-11-21T18:39:21+00:00 lis-mail postfix/smtpd[17893]: connect from bot-2.incus[10.225.218.180]
+2026-11-21T18:39:21+00:00 lis-mail postfix/smtpd[17893]: NOQUEUE: lost connection after CONNECT from bot-2.incus[10.225.218.180]
+2026-11-21T18:39:21+00:00 lis-mail postfix/smtpd[17893]: disconnect from bot-2.incus[10.225.218.180] commands=0/0
+2026-11-21T18:39:31+00:00 lis-mail postfix/smtpd[17893]: connect from bot-2[10.225.218.180]
+2026-11-21T18:39:31+00:00 lis-mail postfix/smtpd[17893]: NOQUEUE: lost connection after CONNECT from bot-2[10.225.218.180]
+2026-11-21T18:39:31+00:00 lis-mail postfix/smtpd[17893]: disconnect from bot-2[10.225.218.180] commands=0/0
+2026-11-21T18:39:41+00:00 lis-mail postfix/smtpd[17893]: connect from bot-2[10.225.218.180]
+2026-11-21T18:39:41+00:00 lis-mail postfix/smtpd[17893]: NOQUEUE: lost connection after CONNECT from bot-2[10.225.218.180]
+2026-11-21T18:39:41+00:00 lis-mail postfix/smtpd[17893]: disconnect from bot-2[10.225.218.180] commands=0/0

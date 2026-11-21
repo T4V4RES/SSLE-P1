@@ -1,0 +1,11 @@
+16:45:34.587 handshake falhou com 10.225.218.210 - SSLError TLSV1_ALERT_UNKNOWN_CA
+16:45:34.601 TLS aceite por 10.225.218.210 - recebido:
+    POST /ingest HTTP/1.1
+    Host: k3s-master.incus:30441
+    User-Agent: curl/8.14.1
+    Accept: */*
+    Content-Type: application/json
+    Authorization: Bearer TOKEN-DE-ENSAIO
+    Content-Length: 80
+    
+    {"device_id":"pt.lisboa.dc1.rack1.lab.sensor.temperature.01","temperature":21.0}

@@ -1,0 +1,27 @@
+#!/bin/sh
+# Filtro de conteudo do Postfix (pipe). Passa a mensagem pelo spamd, regista
+# o resultado com o IP de origem (lido pelo Wazuh) e volta a entregar.
+# Argumentos: client_address sender recipient...
+client=$1
+sender=$2
+shift 2
+
+msg=$(mktemp) || exit 75
+trap 'rm -f "$msg"' EXIT
+
+# Se o spamd falhar, o spamc devolve a mensagem sem alteracoes (fail-open)
+/usr/bin/spamc -u spamfilter > "$msg" || exit 75
+
+status=$(awk '/^X-Spam-Status:/ {h = $0; f = 1; next}
+              f && /^[ \t]/     {h = h $0; next}
+              f                 {exit}
+              /^$/              {exit}
+              END               {print h}' "$msg" | tr -s ' \t' ' ')
+result=$(echo "$status" | sed -n 's/^X-Spam-Status: \([A-Za-z]*\),.*/\1/p')
+score=$(echo "$status" | sed -n 's/.* score=\([-0-9.]*\).*/\1/p')
+tests=$(echo "$status" | sed -n 's/.* tests=\([^ ]*\).*/\1/p')
+
+logger -t spamfilter -p mail.info \
+    "result=${result:-unknown} score=${score:-0} client=$client from=<$sender> to=<$*> tests=${tests:-none}"
+
+exec /usr/sbin/sendmail -G -i -f "$sender" -- "$@" < "$msg"

@@ -1,0 +1,21 @@
+bot-1: 13×000 40×200 13×429 
+  primeiro 000 (bloqueado) às 19:20:30
+bot-2: 13×000 40×200 13×429 
+  primeiro 000 (bloqueado) às 19:20:30
+bot-3: 13×000 40×200 12×429 
+  primeiro 000 (bloqueado) às 19:20:30
+legítimo 200: 59
+legítimo: média 2.1 ms, máximo 2.9 ms
+bloqueio ativo no fim: -A INPUT -s 10.225.218.180/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.197/32 -j DROP
+bloqueio ativo no fim: -A INPUT -s 10.225.218.190/32 -j DROP
+regra 100205: 2x, primeira às 19:20:28.144 UTC - Volume elevado: 10.225.218.190 fez muitos pedidos ao gateway em 10 s.
+regra 100206: 3x, primeira às 19:20:30.141 UTC - Possivel DoS: 10.225.218.190 excedeu repetidamente o limite de pedidos do gateway.
+regra 100207: 1x, primeira às 19:20:28.149 UTC - Possivel DDoS distribuido: varias origens com volume elevado no gateway (ultima 10.225.218.197).
+regra 100231: 1x, primeira às 19:21:04.036 UTC - Prometheus: SharedGatewayRequestSurge em gateway/ ().
+regra 100232: 4x, primeira às 19:21:06.033 UTC - Correlacao no site lisboa: ataque 100207 e sintoma SharedGatewayRequestSurge em 120 segundos.
+regra 651: 3x, primeira às 19:20:32.042 UTC - Host Blocked by firewall-drop Active Response
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100207', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '35.887000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.190', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '33.895000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.180', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '33.880000'}
+correlação: {'site': 'lisboa', 'scope': 'gateway', 'attack_rule': '100206', 'source': '10.225.218.197', 'performance_alert': 'SharedGatewayRequestSurge', 'delta_seconds': '33.880000'}

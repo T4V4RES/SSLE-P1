@@ -1,0 +1,621 @@
+# Modelo de um site. Os valores entre @ são preenchidos por infra/site-config.py.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: '@SITE@'
+  labels:
+    pod-security.kubernetes.io/enforce: restricted
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: storage-data
+  namespace: '@SITE@'
+spec:
+  accessModes:
+  - ReadWriteOnce
+  storageClassName: local-path
+  resources:
+    requests:
+      storage: 1Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storage
+  namespace: '@SITE@'
+spec:
+  replicas: 1
+  strategy:
+    type: Recreate
+  selector:
+    matchLabels:
+      app: storage
+  template:
+    metadata:
+      labels:
+        app: storage
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        fsGroup: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: storage
+        image: ssle/storage:@IMAGE_TAG@
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5002
+          name: metrics
+        env:
+        - name: SSLE_DIRECT
+          value: '1'
+        - name: TEMP_DB
+          value: /data/temp_data.db
+        volumeMounts:
+        - name: data
+          mountPath: /data
+        - name: tmp
+          mountPath: /tmp
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 128Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5002
+          failureThreshold: 30
+          periodSeconds: 5
+      volumes:
+      - name: data
+        persistentVolumeClaim:
+          claimName: storage-data
+      - name: tmp
+        emptyDir: {}
+      automountServiceAccountToken: false
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: storage
+  namespace: '@SITE@'
+spec:
+  type: ClusterIP
+  selector:
+    app: storage
+  ports:
+  - port: 5002
+    targetPort: 5002
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: ingestion
+  namespace: '@SITE@'
+spec:
+  replicas: @INGESTION_REPLICAS@
+  selector:
+    matchLabels:
+      app: ingestion
+  template:
+    metadata:
+      labels:
+        app: ingestion
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 10001
+      containers:
+      - name: ingestion
+        image: ssle/ingestion:@IMAGE_TAG@
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5001
+          name: metrics-tls
+        env:
+        - name: SSLE_DIRECT
+          value: '1'
+        - name: STORAGE_URL
+          value: http://storage:5002
+        - name: DEVICE_KEYS_DIR
+          value: /run/ssle/devices
+        - name: INGESTION_TLS_CERT
+          value: /run/ssle/tls/tls.crt
+        - name: INGESTION_TLS_KEY
+          value: /run/ssle/tls/tls.key
+        - name: INGESTION_CLIENT_CA
+          value: /run/ssle/client-ca/ca.crt
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+            scheme: HTTPS
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5001
+            scheme: HTTPS
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5001
+            scheme: HTTPS
+          failureThreshold: 30
+          periodSeconds: 5
+        volumeMounts:
+        - name: tls
+          mountPath: /run/ssle/tls
+          readOnly: true
+        - name: devices
+          mountPath: /run/ssle/devices
+          readOnly: true
+        - name: client-ca
+          mountPath: /run/ssle/client-ca
+          readOnly: true
+      automountServiceAccountToken: false
+      topologySpreadConstraints:
+      - maxSkew: 1
+        topologyKey: kubernetes.io/hostname
+        whenUnsatisfiable: DoNotSchedule
+        labelSelector:
+          matchLabels:
+            app: ingestion
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: ingestion
+              topologyKey: kubernetes.io/hostname
+      volumes:
+      - name: tls
+        secret:
+          secretName: ingestion-tls
+          defaultMode: 288
+      - name: devices
+        secret:
+          secretName: sensor-digests
+          defaultMode: 288
+      - name: client-ca
+        configMap:
+          name: sensor-client-ca
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: ingestion
+  namespace: '@SITE@'
+spec:
+  type: NodePort
+  # Local: o pod vê o IP real do sensor (sem SNAT), que entra no registo das
+  # recusas e permite ao Wazuh bloquear a origem. Cada nó tem uma réplica.
+  externalTrafficPolicy: Local
+  selector:
+    app: ingestion
+  ports:
+  - port: 5001
+    targetPort: 5001
+    nodePort: @SENSOR_PORT@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: analytics
+  namespace: '@SITE@'
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: analytics
+  template:
+    metadata:
+      labels:
+        app: analytics
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: analytics
+        image: ssle/analytics:@IMAGE_TAG@
+        imagePullPolicy: Never
+        ports:
+        - containerPort: 5003
+          name: metrics
+        env:
+        - name: SSLE_DIRECT
+          value: '1'
+        - name: STORAGE_URL
+          value: http://storage:5002
+        readinessProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          periodSeconds: 5
+        livenessProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          periodSeconds: 10
+        resources:
+          requests:
+            cpu: 10m
+            memory: 16Mi
+          limits:
+            cpu: 200m
+            memory: 64Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        startupProbe:
+          httpGet:
+            path: /health
+            port: 5003
+          failureThreshold: 30
+          periodSeconds: 5
+      automountServiceAccountToken: false
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchLabels:
+                  app: analytics
+              topologyKey: kubernetes.io/hostname
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: analytics
+  namespace: '@SITE@'
+spec:
+  type: NodePort
+  externalTrafficPolicy: Local
+  selector:
+    app: analytics
+  ports:
+  - port: 5003
+    targetPort: 5003
+    nodePort: @API_PORT@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sensor
+  namespace: '@SITE@'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: sensor
+  template:
+    metadata:
+      labels:
+        app: sensor
+    spec:
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 10001
+        seccompProfile:
+          type: RuntimeDefault
+        fsGroup: 10001
+      containers:
+      - name: sensor
+        image: ssle/sensor:@IMAGE_TAG@
+        imagePullPolicy: Never
+        env:
+        - name: SSLE_DIRECT
+          value: '1'
+        - name: INGESTION_URL
+          value: https://ingestion:5001
+        - name: DEVICE_ID
+          value: pt.@SITE@.dc1.rack1.lab.sensor.temperature.01
+        - name: SENSOR_TOKEN_FILE
+          value: /run/ssle/sensor/token
+        - name: INGESTION_CA
+          value: /run/ssle/ca/ca.crt
+        - name: INTERVAL_MS
+          value: '5000'
+        resources:
+          requests:
+            cpu: 5m
+            memory: 8Mi
+          limits:
+            cpu: 100m
+            memory: 32Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        volumeMounts:
+        - name: credential
+          mountPath: /run/ssle/sensor
+          readOnly: true
+        - name: ca
+          mountPath: /run/ssle/ca
+          readOnly: true
+      automountServiceAccountToken: false
+      volumes:
+      - name: credential
+        secret:
+          secretName: sensor-default
+          defaultMode: 288
+      - name: ca
+        configMap:
+          name: ingestion-ca
+---
+apiVersion: v1
+kind: ResourceQuota
+metadata:
+  name: project-budget
+  namespace: '@SITE@'
+spec:
+  hard:
+    requests.cpu: '2'
+    requests.memory: 1Gi
+    limits.cpu: '4'
+    limits.memory: 2Gi
+    pods: '20'
+---
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  name: prometheus
+  namespace: '@SITE@'
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: prometheus
+  namespace: '@SITE@'
+rules:
+- apiGroups:
+  - ''
+  resources:
+  - pods
+  verbs:
+  - get
+  - list
+  - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: prometheus
+  namespace: '@SITE@'
+subjects:
+- kind: ServiceAccount
+  name: prometheus
+  namespace: '@SITE@'
+roleRef:
+  kind: Role
+  name: prometheus
+  apiGroup: rbac.authorization.k8s.io
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: '@SITE@'
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+      annotations:
+        ssle/config-sha256: '@MONITOR_HASH@'
+    spec:
+      serviceAccountName: prometheus
+      # O Prometheus global federa pelo primeiro nó; com externalTrafficPolicy
+      # Local, o pod tem de estar nesse nó.
+      nodeSelector:
+        kubernetes.io/hostname: '@FEDERATION_NODE@'
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 65534
+        fsGroup: 65534
+        seccompProfile:
+          type: RuntimeDefault
+      containers:
+      - name: prometheus
+        image: prom/prometheus:v3.5.0
+        args:
+        - --config.file=/etc/prometheus/prometheus.yml
+        - --storage.tsdb.path=/prometheus
+        - --storage.tsdb.retention.time=24h
+        - --storage.tsdb.retention.size=128MB
+        ports:
+        - containerPort: 9090
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true
+          capabilities:
+            drop:
+            - ALL
+        resources:
+          requests:
+            cpu: 50m
+            memory: 128Mi
+          limits:
+            cpu: 500m
+            memory: 512Mi
+        readinessProbe:
+          httpGet:
+            path: /-/ready
+            port: 9090
+        volumeMounts:
+        - name: config
+          mountPath: /etc/prometheus
+        - name: data
+          mountPath: /prometheus
+        - name: ca
+          mountPath: /etc/ssle/ca
+          readOnly: true
+      volumes:
+      - name: config
+        configMap:
+          name: prometheus
+      - name: data
+        emptyDir: {}
+      - name: ca
+        configMap:
+          name: ingestion-ca
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: '@SITE@'
+spec:
+  type: NodePort
+  # Local preserva o IP de origem: a política de rede só aceita o Prometheus global.
+  externalTrafficPolicy: Local
+  selector:
+    app: prometheus
+  ports:
+  - port: 9090
+    nodePort: @METRICS_PORT@
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: ssle-site
+  namespace: '@SITE@'
+spec:
+  podSelector: {}
+  policyTypes: [Ingress, Egress]
+  egress:
+  - to:
+    - podSelector: {}
+  - to:
+    - namespaceSelector:
+        matchLabels:
+          kubernetes.io/metadata.name: kube-system
+    ports:
+    - {protocol: UDP, port: 53}
+    - {protocol: TCP, port: 53}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: storage-internal
+  namespace: '@SITE@'
+spec:
+  podSelector:
+    matchLabels: {app: storage}
+  policyTypes: [Ingress]
+  ingress:
+  - from:
+    - podSelector:
+        matchExpressions:
+        - {key: app, operator: In, values: [ingestion, analytics, prometheus]}
+    ports:
+    - {protocol: TCP, port: 5002}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: sensor-https
+  namespace: '@SITE@'
+spec:
+  podSelector:
+    matchLabels: {app: ingestion}
+  policyTypes: [Ingress]
+  ingress:
+  - ports:
+    - {protocol: TCP, port: 5001}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: gateway-read
+  namespace: '@SITE@'
+spec:
+  podSelector:
+    matchLabels: {app: analytics}
+  policyTypes: [Ingress]
+  ingress:
+  - from:
+    - ipBlock: {cidr: '@GATEWAY_CIDR@'}
+    - podSelector:
+        matchLabels: {app: prometheus}
+    ports:
+    - {protocol: TCP, port: 5003}
+---
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: prometheus-management
+  namespace: '@SITE@'
+spec:
+  podSelector:
+    matchLabels: {app: prometheus}
+  policyTypes: [Ingress, Egress]
+  ingress:
+  # Só o Prometheus global lê as métricas e os alertas do site.
+  - from:
+    - ipBlock: {cidr: '@MONITOR_CIDR@'}
+    ports:
+    - {protocol: TCP, port: 9090}
+  egress:
+  - ports:
+    - {protocol: TCP, port: 443}
+    - {protocol: TCP, port: 6443}
+  - to:
+    - ipBlock: {cidr: '@MONITOR_CIDR@'}
+    ports:
+    - {protocol: TCP, port: 9093}

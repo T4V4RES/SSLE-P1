@@ -14,6 +14,21 @@ A VM Kali aloja dois sites no mesmo cluster K3s, Lisboa e Porto. O Incus aloja o
 | `tests/` | testes unitários, `promtool`, aceitação e falha controlada |
 | `evidencias/` | resultados dos ensaios de 21/11/2026 |
 | `relatorio/` | artigo em LaTeX e PDF |
+| `demo/` | vídeos das demonstrações, um por ataque |
+
+## Vídeos das demonstrações
+
+Cada vídeo mostra o ataque a correr na VM, a firewall do serviço atacado e os eventos no Wazuh. Em alguns, mostra também o Prometheus global.
+
+| Vídeo | Cenário | O que se vê |
+|---|---|---|
+| [`demo/demo-rajada.mp4`](demo/demo-rajada.mp4) | 1. Rajada HTTP (`bot-1`) | `429` no nginx, regras 100204/100206, DROP no gateway durante 120 s, cliente legítimo sem erros |
+| [`demo/demo-ddos.mp4`](demo/demo-ddos.mp4) | 1. Botnet com 3 bots | DROP dos 3 bots aos 6 s, botnet (100207), pico no Prometheus (100231) e correlação no site de Lisboa (100232) |
+| [`demo/demo-spam.mp4`](demo/demo-spam.mp4) | 2. Spam e fraude (`bot-2`) | quarentena no Postfix, regras 100221/100222, DROP no correio, cabeçalhos `X-Spam`, correio legítimo entregue |
+| [`demo/demo-shellshock.mp4`](demo/demo-shellshock.mp4) | 3. Shellshock (`bot-3`) | pedido `() { :; };` com resposta `404`, regra 100210 de nível 12, DROP no gateway |
+| [`demo/demo-publicacao.mp4`](demo/demo-publicacao.mp4) | Extra: publicação não autorizada | `401`/`403`/`400`, regras 100246/100247, DROP no nó K3s, alerta 100245 vindo do Prometheus, nenhuma leitura gravada |
+| [`demo/demo-mitm.mp4`](demo/demo-mitm.mp4) | Extra: interceção do sensor | certificado falso recusado (`TLSV1_ALERT_UNKNOWN_CA`); só com `-k` o intercetor capta o pedido |
+| [`demo/demo-reincidencia.mp4`](demo/demo-reincidencia.mp4) | Reputação (reincidência) | 1.º Shellshock bloqueado só no gateway; o 2.º, depois de o bloqueio expirar, gera a 100208 e bloqueia o `bot-3` durante 10 min no gateway, no correio e nos dois nós K3s |
 
 ## Confirmar o estado
 
